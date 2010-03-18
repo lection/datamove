@@ -6,6 +6,7 @@
 package core.adapter;
 
 import core.Task;
+import java.sql.SQLException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -40,7 +41,7 @@ public abstract class SimpleTask implements Task{
     }
     
     public abstract Object readIn();
-    public abstract Object parse(Object object) throws DataException;
+    public abstract Object parse(Object object) throws DataException,SQLException;
     public abstract void store(Object object) throws Exception;
     public abstract void afterStore() throws Exception;
     public abstract void errorHandle(DataException ex);

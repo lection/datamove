@@ -4,4 +4,5 @@
 <beans>
     <bean id="personSaver" class="saver.PersonImplSaver" autowire="byName"/>
     <bean id="userSaver" class="saver.UserImplSaver" autowire="byName"/>
+    <bean id="hotlineSaver" class="saver.HotlineSaver" autowire="byName"/>
 </beans>

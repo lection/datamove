@@ -56,15 +56,15 @@ public abstract class J2JTaskSupport extends SimpleTask{
     }
 
     @Override
-    public Object parse(Object object) throws DataException {
+    public Object parse(Object object) throws DataException,SQLException {
         return this.parse(saver.getConn(),sourceRs);
     }
 
-    public abstract Object parse(Connection conn,ResultSet rs) throws DataException;
+    public abstract Object parse(Connection conn,ResultSet rs) throws DataException,SQLException;
 
     @Override
     public void store(Object object) throws SQLException {
-//        saver.save(object);
+        saver.save(object);
     }
 
     @Override
