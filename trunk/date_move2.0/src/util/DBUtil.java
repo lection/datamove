@@ -33,4 +33,14 @@ public class DBUtil {
         }
         return result;
     }
+
+    public static void close(Connection conn){
+        try {
+            if (conn != null && conn.isClosed()) {
+                conn.close();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 }

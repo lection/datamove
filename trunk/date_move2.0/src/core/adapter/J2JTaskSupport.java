@@ -23,7 +23,6 @@ import util.saver.Saver;
 public abstract class J2JTaskSupport extends SimpleTask{
     private static final Log log = LogFactory.getLog(J2JTaskSupport.class);
     private Connection sourceConn;
-    private Connection targetConn;
     private Statement sourceStmt;
     private ResultSet sourceRs;
     private String sql;
@@ -58,7 +57,7 @@ public abstract class J2JTaskSupport extends SimpleTask{
 
     @Override
     public Object parse(Object object) throws DataException {
-        return this.parse(targetConn,sourceRs);
+        return this.parse(saver.getConn(),sourceRs);
     }
 
     public abstract Object parse(Connection conn,ResultSet rs) throws DataException;
@@ -74,7 +73,7 @@ public abstract class J2JTaskSupport extends SimpleTask{
     }
 
     @Override
-    public void init() {
+    public void init() throws Exception{
         try {
             saver.init();
         } catch (SQLException ex) {
@@ -84,7 +83,7 @@ public abstract class J2JTaskSupport extends SimpleTask{
     }
 
     @Override
-    public void destory() {
+    public void destory() throws Exception{
         try{
             saver.destory();
             if(sourceRs!=null)
@@ -96,6 +95,10 @@ public abstract class J2JTaskSupport extends SimpleTask{
         }catch(SQLException ex){
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public void afterStore() throws Exception {
     }
 
     public Saver getSaver() {
@@ -123,11 +126,6 @@ public abstract class J2JTaskSupport extends SimpleTask{
     }
 
     public Connection getTargetConn() {
-        return targetConn;
+        return saver.getConn();
     }
-
-    public void setTargetConn(Connection targetConn) {
-        this.targetConn = targetConn;
-    }
-
 }

@@ -16,6 +16,6 @@
         <property name="username" value="root"/>
         <property name="password" value="root" />
     </bean>
-    <bean id="sourceConn" factory-bean="sourceDS" factory-method="getConnection"/>
-    <bean id="targetConn" factory-bean="targetDS" factory-method="getConnection"/>
+    <bean id="sourceConn" factory-bean="sourceDS" factory-method="getConnection" scope="prototype"/>
+    <bean id="targetConn" factory-bean="targetDS" factory-method="getConnection" scope="prototype"/>
 </beans>
