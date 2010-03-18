@@ -1,6 +1,5 @@
 package core;
 
-import core.Task;
 import java.util.List;
 
 public class TaskList {

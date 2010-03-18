@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+"http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+    <bean id="sourceDS" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/scaedb_1" />
+        <property name="username" value="root"/>
+        <property name="password" value="root" />
+    </bean>
+    <bean id="targetDS" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/mpmaps_test" />
+        <property name="username" value="root"/>
+        <property name="password" value="root" />
+    </bean>
+    <bean id="sourceConn" factory-bean="sourceDS" factory-method="getConnection"/>
+    <bean id="targetConn" factory-bean="targetDS" factory-method="getConnection"/>
+</beans>

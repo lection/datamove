@@ -5,7 +5,13 @@
     <bean id="taskList" class="core.TaskList">
         <property name="taskList">
             <list>
+                <ref bean="userTask"/>
             </list>
         </property>
+    </bean>
+    <!--用户,依赖组织的id-->
+    <bean id="userTask" class="task.scae.SaleUserTask" autowire="byName">
+        <property name="parent_name" value="上海销售服务中心"/>
+        <property name="sql" value="select user.*,org.dcenter_name from scae_dcentersales user,scae_dcenter org where user.dcenter_id=org.id"/>
     </bean>
 </beans>
