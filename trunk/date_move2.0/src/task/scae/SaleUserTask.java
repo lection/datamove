@@ -49,6 +49,7 @@ public class SaleUserTask extends J2JTaskSupport{
 
     @Override
     public void init() {
+        super.init();
         DBUtil.executeQuery(getTargetConn(), 
                 "select t.c_id as id from t_tenent t,t_organization o,t_internal_org io where o.c_name='" + parent_name
                 + "' and o.c_id=io.c_org_id and io.c_tenent_id=t.c_id"

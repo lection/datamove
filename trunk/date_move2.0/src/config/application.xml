@@ -11,7 +11,8 @@
     </bean>
     <!--用户,依赖组织的id-->
     <bean id="userTask" class="task.scae.SaleUserTask" autowire="byName">
+        <property name="saver" ref="userSaver"/>
         <property name="parent_name" value="上海销售服务中心"/>
-        <property name="sql" value="select user.*,org.dcenter_name from scae_dcentersales user,scae_dcenter org where user.dcenter_id=org.id"/>
+        <property name="sql" value="select user.*,org.dcenter_name from scae_dcentersales user,scae_dcenter org where user.dcenter_id in (6,31,9,29,2,30,35,4,28,7,32) and user.dcenter_id=org.id"/>
     </bean>
 </beans>
