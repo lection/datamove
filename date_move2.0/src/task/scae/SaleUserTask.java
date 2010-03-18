@@ -5,17 +5,20 @@
 
 package task.scae;
 
-import com.linkin.crm.core.model.Organization;
 import com.linkin.crm.core.model.Tenent;
+import com.linkin.crm.um.model.InternalOrgImpl;
 import com.linkin.crm.um.model.UserImpl;
 import core.adapter.DataException;
 import core.adapter.J2JTaskSupport;
+import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -32,9 +35,8 @@ import util.DBUtil.Query;
 public class SaleUserTask extends J2JTaskSupport{
     private static final Log log = LogFactory.getLog(SaleUserTask.class);
     private Tenent tenent;
-    private Map<String,Organization> orgMap = new HashMap<String, Organization>();
+    private Map<String,InternalOrgImpl> orgMap = new HashMap<String, InternalOrgImpl>();
     private HanyuPinyinOutputFormat format;
-    private Long parent_id = null;
     private String parent_name;
     private Date date1;
     private Date date2;
@@ -48,7 +50,7 @@ public class SaleUserTask extends J2JTaskSupport{
     }
 
     @Override
-    public void init() {
+    public void init() throws Exception{
         super.init();
         DBUtil.executeQuery(getTargetConn(), 
                 "select t.c_id as id from t_tenent t,t_organization o,t_internal_org io where o.c_name='" + parent_name
@@ -67,7 +69,7 @@ public class SaleUserTask extends J2JTaskSupport{
                 , new Query(){
             public Object execute(ResultSet rs) throws SQLException{
                 while(rs.next()){
-                    Organization org = new Organization();
+                    InternalOrgImpl org = new InternalOrgImpl();
                     org.setId(rs.getLong("id"));
                     SaleUserTask.this.orgMap.put(rs.getString("name"), org);
                 }return null;
@@ -79,13 +81,30 @@ public class SaleUserTask extends J2JTaskSupport{
     public Object parse(Connection conn, ResultSet rs) throws DataException {
         UserImpl user = new UserImpl();
         try {
-            System.out.println(rs.getLong("id") + "\t" + orgMap.get(rs.getString("dcenter_name")));
+            user.setLastname(rs.getString("sales_name"));
+            user.setIntOrg(orgMap.get(rs.getString("dcenter_name")));
+            user.setTenent(tenent);
+            user.setPassword("bGMhKrSOhAHq9rWbldgWqQ==");
+            user.setActiveStatus(1);
+            user.setLogStatus(1);
+            user.setLock(1);
+            user.setInactiveDate(date1);
+            user.setPasswordExpirationDate(date2);
+            //user的loginName应当放在最后，因为这个属性依赖组织、用户id
+            user.setLoginName(this.getLoginName(user,rs.getLong("id")));
+            user.setEmail(user.getLoginName() + "@linkinways.com");
+            user.setCphone1("");
+            //特殊字段，记录user在scae系统中的id,解决重名用户的迁移问题
+            user.setP_ext_str1("scae" + rs.getLong("id"));
+            //lead表迁移时，根据顾问名+组织号，解决重名问题
+            user.setP_ext_str2(rs.getString("sales_name")+rs.getString("dcenter_id"));
+//            System.out.println(user.getLastname());
         } catch (SQLException ex) {
             throw new DataException(user);
         }
         return user;
     }
-    
+  
     @Override
     public void errorHandle(DataException ex) {
         UserImpl user = (UserImpl)ex.getErrorObject();

@@ -5,6 +5,7 @@
 
 package util.saver;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
@@ -15,4 +16,5 @@ public interface Saver {
     void save(Object object) throws SQLException;
     void init() throws SQLException;
     void destory() throws SQLException;
+    Connection getConn();
 }

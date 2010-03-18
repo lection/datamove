@@ -33,12 +33,13 @@ public abstract class AbstractSaver implements Saver{
 
     public void save(Object object) throws SQLException {
         cap(object);
-        this.preStat.addBatch();
-        count++;
-        if(count > 20){
-            this.preStat.executeBatch();
-            count = 0;
-        }
+        this.preStat.executeUpdate();
+//        this.preStat.addBatch();
+//        count++;
+//        if(count > 20){
+//            this.preStat.executeBatch();
+//            count = 0;
+//        }
     }
 
     protected long getHiloId() throws SQLException{
@@ -72,23 +73,38 @@ public abstract class AbstractSaver implements Saver{
 
     private void updateHi() throws SQLException{
         Statement statement = targetConn.createStatement();
-        ResultSet rs = statement.executeQuery("select " + columnName + " from" + tableName);
-        if(rs.next())hi = rs.getInt(1);
+        ResultSet rs = statement.executeQuery("select " + columnName + " from " + tableName);
+        if(rs.next()){
+            hi = rs.getInt(1);
+        }
         else hi = 1;
+        if(hi<1)hi=1;
         rs.close();
         statement.executeUpdate("update " + tableName + " set " + columnName + "=" + (hi+1));
         statement.close();
     }
 
     public void destory() throws SQLException {
-        this.preStat.executeBatch();
-        if(this.preStat!=null)this.preStat.close();
-        if(this.targetConn!=null)this.targetConn.close();
+        if(this.preStat!=null){
+//            this.preStat.executeBatch();
+            this.preStat.close();
+        }
+        if(this.targetConn!=null&&!this.targetConn.isClosed()){
+            if(!targetConn.getAutoCommit())
+                this.targetConn.commit();
+            this.targetConn.close();
+        }
     }
 
     public void init() throws SQLException {
-        if(tableName!=null)updateHi();
+        targetConn.setAutoCommit(false);
+        if(tableName!=null){
+            updateHi();
+        }
         this.preStat = targetConn.prepareStatement(this.getInsertSql());
     }
 
+    public Connection getConn() {
+        return this.targetConn;
+    }
 }

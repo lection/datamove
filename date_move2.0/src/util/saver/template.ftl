@@ -30,7 +30,8 @@ public class ${className}Saver extends AbstractSaver{
             pre.set${pro[key][1]?if_exists}(${key_index+2},obj.get${pro[key][2]?if_exists}());
         else pre.setNull(${key_index+2},Types.BIGINT);
         <#else>
-        pre.set${pro[key][1]?if_exists}(${key_index+2},obj.get${pro[key][2]?if_exists}());
+        try{pre.set${pro[key][1]?if_exists}(${key_index+2},obj.get${pro[key][2]?if_exists}());}
+        catch(NullPointerException ex){pre.setNull(${key_index+2},Types.<#if pro[key][1]?exists&&pro[key][1]=="Long">BIGINT<#else>INTEGER</#if>);}
         </#if>
         </#list>
     }

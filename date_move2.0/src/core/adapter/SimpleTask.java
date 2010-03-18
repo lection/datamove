@@ -18,26 +18,32 @@ public abstract class SimpleTask implements Task{
     
     public void execute() {
         Object object = null;
-        this.init();
-        while((object = this.readIn()) != null){
-            try{
-                this.store(this.parse(object));
-            }catch(DataException ex){
-                this.errorHandle(ex);
-            }catch(Exception ex){
-                System.out.println("系统抛出不可处理的异常：");
-                log.error("系统出现不可处理的异常");
-                log.error(ex.getStackTrace());
-                throw new RuntimeException(ex.getMessage());
+        try {
+            this.init();
+            while((object = this.readIn()) != null){
+                try{
+                    this.store(this.parse(object));
+                }catch(DataException ex){
+                    this.errorHandle(ex);
+                }catch(Exception ex){
+                    System.out.println("系统抛出不可处理的异常：");
+                    log.error("系统出现不可处理的异常");
+                    log.error(ex.getStackTrace());
+                    throw new RuntimeException(ex);
+                }
             }
+            this.destory();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
-        this.destory();
     }
     
     public abstract Object readIn();
     public abstract Object parse(Object object) throws DataException;
     public abstract void store(Object object) throws Exception;
+    public abstract void afterStore() throws Exception;
     public abstract void errorHandle(DataException ex);
-    public abstract void init();
-    public abstract void destory();
+    public abstract void init() throws Exception;
+    public abstract void destory() throws Exception;
 }

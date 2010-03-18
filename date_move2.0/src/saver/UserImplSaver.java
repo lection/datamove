@@ -14,20 +14,27 @@ public class UserImplSaver extends AbstractSaver{
 
     public void cap(Object object) throws SQLException{
         UserImpl obj = (UserImpl)object;
+        personSaver.save(obj);
         PreparedStatement pre = getPreStat();
         pre.setLong(1,obj.getId());
-        pre.setString(2,obj.getLoginName());
-        pre.setString(3,obj.getPassword());
-        pre.setInt(4,obj.getLock());
-        pre.setInt(5,obj.getActiveStatus());
-        pre.setInt(6,obj.getLogStatus());
+        try{pre.setString(2,obj.getLoginName());}
+        catch(NullPointerException ex){pre.setNull(2,Types.INTEGER);}
+        try{pre.setString(3,obj.getPassword());}
+        catch(NullPointerException ex){pre.setNull(3,Types.INTEGER);}
+        try{pre.setInt(4,obj.getLock());}
+        catch(NullPointerException ex){pre.setNull(4,Types.INTEGER);}
+        try{pre.setInt(5,obj.getActiveStatus());}
+        catch(NullPointerException ex){pre.setNull(5,Types.INTEGER);}
+        try{pre.setInt(6,obj.getLogStatus());}
+        catch(NullPointerException ex){pre.setNull(6,Types.INTEGER);}
         if(obj.getRegisterDate() != null)
             pre.setDate(7,new Date(obj.getRegisterDate().getTime()));
         else pre.setDate(7,null);
         if(obj.getInactiveDate() != null)
             pre.setDate(8,new Date(obj.getInactiveDate().getTime()));
         else pre.setDate(8,null);
-        pre.setInt(9,obj.getExpirationDay());
+        try{pre.setInt(9,obj.getExpirationDay());}
+        catch(NullPointerException ex){pre.setNull(9,Types.INTEGER);}
         if(obj.getPasswordExpirationDate() != null)
             pre.setDate(10,new Date(obj.getPasswordExpirationDate().getTime()));
         else pre.setDate(10,null);
@@ -46,6 +53,14 @@ public class UserImplSaver extends AbstractSaver{
         return "insert into t_um_user"
          + " (c_person_id ,c_login ,c_password ,c_status ,c_activestatus ,c_logstatus ,c_registerDate ,c_inactiveDate ,c_expirationDay ,c_passwordExpirationDate ,c_user_id ,c_org_id ,c_tenent_id"
          +") values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    }
+
+    @Override
+    public void init() throws SQLException {
+        super.init();
+        personSaver.destory();
+        personSaver.setTargetConn(this.getTargetConn());
+        personSaver.init();
     }
 
     @Override
