@@ -31,6 +31,8 @@ public class SaverHandlerImpl implements SaverHandler{
     Template temp = null;
     private PrintWriter writer;
 
+    private Map<String,Map> classMap = new HashMap<String,Map>();
+
     public void execute(File sourceFile, File targetFile, String template) throws IOException {
         cfg.setDirectoryForTemplateLoading(new File(template).getParentFile());
         temp = cfg.getTemplate("template.ftl");
@@ -38,7 +40,8 @@ public class SaverHandlerImpl implements SaverHandler{
         try {root = saxReader.read(sourceFile).getRootElement();}
         catch (DocumentException ex) {throw new IOException(sourceFile.getAbsolutePath() + "解析失败");}
         packageName = root.attributeValue("package");
-        List<Element> list = root.elements("class");
+        List<Element> list = new ArrayList<Element>(root.elements("class"));
+        list.addAll(root.elements("joined-subclass"));
         if(list.size() > 1 && targetFile.isFile())throw new IOException(sourceFile.getAbsolutePath() + "中的类有多个");
         for(Element e:list){
             parseClass(e, targetFile);
@@ -66,6 +69,7 @@ public class SaverHandlerImpl implements SaverHandler{
             ex.printStackTrace();
         }
         writer.close();
+        classMap.put(className, data);
     }
 
     private Map parseProperty(Element element){
@@ -100,9 +104,13 @@ public class SaverHandlerImpl implements SaverHandler{
     private Map parseId(Element element){
         Map map = new HashMap();
         Element id = element.element("id");
-        map.put("id", id.attributeValue("column"));
-        for(Element e:(List<Element>)id.element("generator").elements("param")){
-            map.put(e.attributeValue("name"), e.getText());
+        if(id != null){
+            map.put("id", id.attributeValue("column"));
+            for(Element e:(List<Element>)id.element("generator").elements("param")){
+                map.put(e.attributeValue("name"), e.getText());
+            }
+        }else{
+            map.put("id", element.element("key").attributeValue("column"));
         }
         return map;
     }
