@@ -101,10 +101,12 @@ public abstract class AbstractSaver implements Saver{
         if(tableName!=null){
             updateHi();
         }
-        this.preStat = targetConn.prepareStatement(this.getInsertSql());
+        this.preStat = targetConn.prepareStatement(this.getInsertSql(),Statement.RETURN_GENERATED_KEYS);
     }
 
     public Connection getConn() {
         return this.targetConn;
     }
+
+    public Object getResource() {return this.preStat;}
 }

@@ -17,4 +17,5 @@ public interface Saver {
     void init() throws SQLException;
     void destory() throws SQLException;
     Connection getConn();
+    Object getResource();
 }

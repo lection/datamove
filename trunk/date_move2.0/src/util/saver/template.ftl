@@ -15,6 +15,7 @@ public class ${className}Saver extends AbstractSaver{
     public void cap(Object object) throws SQLException{
         ${className} obj = (${className})object;
         PreparedStatement pre = getPreStat();
+        obj.setId(this.getHiloId());
         pre.setLong(1,obj.getId());
         <#list pro?keys as key>
         <#if (pro[key][1]?exists&&pro[key][1]=="Timestamp")>

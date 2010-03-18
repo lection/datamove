@@ -12,7 +12,7 @@ public class HotlineSaver extends AbstractSaver{
     public void cap(Object object) throws SQLException{
         Hotline obj = (Hotline)object;
         PreparedStatement pre = getPreStat();
-        pre.setLong(1,obj.getId());
+        pre.setNull(1, Types.BIGINT);
         try{pre.setString(2,obj.getHotline());}
         catch(NullPointerException ex){pre.setNull(2,Types.INTEGER);}
         try{pre.setString(3,obj.getStatus());}

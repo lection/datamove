@@ -24,9 +24,10 @@ public class OrgUtil {
     private Connection targetConn;
     private Connection sourceConn;
 
-    public OrgUtil(Connection targetConn, Connection sourceConn) {
+    public OrgUtil(Connection targetConn, Connection sourceConn,String parent_name) {
         this.targetConn = targetConn;
         this.sourceConn = sourceConn;
+        this.parent_name = parent_name;
         DBUtil.executeQuery(targetConn,
                 "select o2.c_id as id,o2.c_alias as name from t_organization o,t_organization o2 where o.c_name='" + parent_name
                 + "' and o.c_id=o2.c_parent_id"
@@ -59,9 +60,5 @@ public class OrgUtil {
 
     public InternalOrgImpl getOrg(Long id){
         return orgIdMap.get(id);
-    }
-
-    public void setParent_name(String parent_name) {
-        this.parent_name = parent_name;
     }
 }
