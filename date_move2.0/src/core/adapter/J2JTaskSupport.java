@@ -10,6 +10,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import util.saver.Saver;
@@ -72,8 +74,19 @@ public abstract class J2JTaskSupport extends SimpleTask{
     }
 
     @Override
+    public void init() {
+        try {
+            saver.init();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new RuntimeException(ex.getMessage());
+        }
+    }
+
+    @Override
     public void destory() {
         try{
+            saver.destory();
             if(sourceRs!=null)
                 sourceRs.close();
             if(sourceStmt!=null)

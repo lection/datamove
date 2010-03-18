@@ -22,10 +22,24 @@ public abstract class AbstractSaver implements Saver{
     private int lo = 0;
     private String tableName;
     private String columnName;
-    private Connection conn;
+    private Connection targetConn;
     private PreparedStatement preStat;
 
+    private int count = 0;
+
     public abstract String getInsertSql();
+
+    public abstract void cap(Object object) throws SQLException;
+
+    public void save(Object object) throws SQLException {
+        cap(object);
+        this.preStat.addBatch();
+        count++;
+        if(count > 20){
+            this.preStat.executeBatch();
+            count = 0;
+        }
+    }
 
     protected long getHiloId() throws SQLException{
         long id = -1;
@@ -42,16 +56,14 @@ public abstract class AbstractSaver implements Saver{
         this.tableName = tableName;
         this.columnName = columnName;
         this.max_lo = max_lo;
-        updateHi();
     }
 
-    public Connection getConn() {
-        return conn;
+    public Connection getTargetConn() {
+        return targetConn;
     }
 
-    public void setConn(Connection conn) throws SQLException {
-        this.conn = conn;
-        preStat = conn.prepareStatement(getInsertSql());
+    public void setTargetConn(Connection targetConn) {
+        this.targetConn = targetConn;
     }
 
     public PreparedStatement getPreStat() {
@@ -59,13 +71,24 @@ public abstract class AbstractSaver implements Saver{
     }
 
     private void updateHi() throws SQLException{
-        Statement statement = conn.createStatement();
+        Statement statement = targetConn.createStatement();
         ResultSet rs = statement.executeQuery("select " + columnName + " from" + tableName);
-        if(rs.next())hi = rs.getInt(0);
+        if(rs.next())hi = rs.getInt(1);
         else hi = 1;
         rs.close();
         statement.executeUpdate("update " + tableName + " set " + columnName + "=" + (hi+1));
         statement.close();
-        conn.close();
     }
+
+    public void destory() throws SQLException {
+        this.preStat.executeBatch();
+        if(this.preStat!=null)this.preStat.close();
+        if(this.targetConn!=null)this.targetConn.close();
+    }
+
+    public void init() throws SQLException {
+        if(tableName!=null)updateHi();
+        this.preStat = targetConn.prepareStatement(this.getInsertSql());
+    }
+
 }
