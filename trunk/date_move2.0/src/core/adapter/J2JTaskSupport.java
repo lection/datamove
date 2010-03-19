@@ -64,7 +64,7 @@ public abstract class J2JTaskSupport extends SimpleTask{
 
     @Override
     public void store(Object object) throws SQLException {
-//        saver.save(object);
+        saver.save(object);
     }
 
     @Override

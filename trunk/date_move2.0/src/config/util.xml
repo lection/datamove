@@ -10,4 +10,8 @@
     <bean id="hotlineUtil" class="util.HotlineUtil" autowire="byName">
         <constructor-arg index="0" ref="targetConn"/>
     </bean>
+    <bean id="proUtil" class="util.ProductCategoryUtil" autowire="byName">
+        <constructor-arg index="0" ref="targetConn"/>
+        <constructor-arg index="1" value="上海销售服务中心"/>
+    </bean>
 </beans>
