@@ -7,7 +7,8 @@
             <list>
                 <!--<ref bean="userTask"/>-->
                 <!--<ref bean="hotlineTask"/>-->
-                <ref bean="mediaPlanTask"/>
+                <!--<ref bean="mediaPlanTask"/>-->
+                <ref bean="campaignTask"/>
             </list>
         </property>
     </bean>
@@ -35,5 +36,16 @@
             </value>
         </property>
         <property name="saver" ref="mediaPlanSaver"/>
+    </bean>
+    <bean id="campaignTask" class="task.scae.CampaignTask" autowire="byName">
+        <property name="sql">
+            <value>
+                select c.*,obj.obj,obj.carmodel_id
+                from scae_campaign as c left outer join scae_campaignobj as obj on c.id=obj.campaign_id
+                where c.dcenter_id in (6,31,9,29,2,30,35,4,28,7,32)
+                order by c.id
+            </value>
+        </property>
+        <property name="saver" ref="campaignSaver"/>
     </bean>
 </beans>
