@@ -21,11 +21,15 @@ public class BudgetSaver extends AbstractSaver{
         catch(NullPointerException ex){pre.setNull(3,Types.INTEGER);}
         try{pre.setDouble(4,obj.getMoney());}
         catch(NullPointerException ex){pre.setNull(4,Types.INTEGER);}
+        if(obj.getCampaign()!=null){pre.setLong(5, obj.getCampaign().getId());}
+        else{pre.setNull(5, Types.BIGINT);}
+        if(obj.getMediaPlan()!=null){pre.setLong(6, obj.getMediaPlan().getId());}
+        else{pre.setNull(6, Types.BIGINT);}
     }
 
     public String getInsertSql(){
         return "insert into t_budget"
-         + " (c_id ,c_month ,c_year ,c_money"
-         +") values(?,?,?,?)";
+         + " (c_id,c_month,c_year,c_money,c_campBasic_id,c_mediaPlan_id"
+         +") values(?,?,?,?,?,?)";
     }
 }

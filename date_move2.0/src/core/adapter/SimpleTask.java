@@ -21,11 +21,15 @@ public abstract class SimpleTask implements Task{
         Object object = null;
         try {
             this.init();
+            int count = 0;
+            int fail = 0;
             while((object = this.readIn()) != null){
                 try{
                     this.store(this.parse(object));
+                    count ++;
                 }catch(DataException ex){
                     this.errorHandle(ex);
+                    fail++;
                 }catch(Exception ex){
                     System.out.println("系统抛出不可处理的异常：");
                     log.error("系统出现不可处理的异常");
@@ -33,6 +37,7 @@ public abstract class SimpleTask implements Task{
                     throw new RuntimeException(ex);
                 }
             }
+            log.info(this.getClass().getSimpleName() + " 共执行 " + count +" 条记录  失败 " + fail + " 条记录");
             this.destory();
         } catch (Exception ex) {
             ex.printStackTrace();
