@@ -7,6 +7,7 @@
             <list>
                 <!--<ref bean="userTask"/>-->
                 <!--<ref bean="hotlineTask"/>-->
+                <ref bean="mediaPlanTask"/>
             </list>
         </property>
     </bean>
@@ -27,6 +28,12 @@
         </property>
     </bean>
     <bean id="mediaPlanTask" class="task.scae.MediaPlanTask" autowire="byName">
-        <property name="sql" value="select m.* from scae_campaignmedia m"/>
+        <property name="sql">
+            <value>
+               select m.* from scae_campaignmedia m,scae_campaign c
+               where m.campaign_id=c.id and c.dcenter_id in (6,31,9,29,2,30,35,4,28,7,32)
+            </value>
+        </property>
+        <property name="saver" ref="mediaPlanSaver"/>
     </bean>
 </beans>

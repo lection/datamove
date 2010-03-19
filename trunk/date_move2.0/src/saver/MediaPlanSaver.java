@@ -1,14 +1,15 @@
 package saver;
 
+import com.linkin.crm.campaign.model.Budget;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
-import java.sql.Date;
 import java.sql.Types;
 import util.saver.AbstractSaver;
 import java.sql.SQLException;
 import com.linkin.crm.campaign.model.MediaPlan;
 
 public class MediaPlanSaver extends AbstractSaver{
+    private BudgetSaver budgetSaver;
     public MediaPlanSaver() throws SQLException{initHilo("t_m2_hi_value","next_value",100);}
     public void cap(Object object) throws SQLException{
         MediaPlan obj = (MediaPlan)object;
@@ -44,5 +45,31 @@ public class MediaPlanSaver extends AbstractSaver{
         return "insert into t_mediaplan"
          + " (c_id ,c_startdate ,c_enddate ,c_mediaChannel_id ,c_mediaName ,c_created_date ,t_budgetType ,c_budgetTotal ,c_hotline_id ,c_org_id"
          +") values(?,?,?,?,?,?,?,?,?,?)";
+    }
+
+    @Override
+    public void save(Object object) throws SQLException {
+        super.save(object);
+        for(Budget budget:((MediaPlan)object).getMediaBudget()){
+            budget.setMediaPlan((MediaPlan)object);
+            budgetSaver.save(budget);
+        }
+    }
+
+    @Override
+    public void init() throws SQLException {
+        super.init();
+        budgetSaver.setTargetConn(this.getTargetConn());
+        budgetSaver.init();
+    }
+
+    @Override
+    public void destory() throws SQLException {
+        super.destory();
+        budgetSaver.destory();
+    }
+
+    public void setBudgetSaver(BudgetSaver budgetSaver) {
+        this.budgetSaver = budgetSaver;
     }
 }

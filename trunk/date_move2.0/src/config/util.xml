@@ -7,4 +7,7 @@
         <constructor-arg index="1" ref="sourceConn"/>
         <constructor-arg index="2" value="上海销售服务中心"/>
     </bean>
+    <bean id="hotlineUtil" class="util.HotlineUtil" autowire="byName">
+        <constructor-arg index="0" ref="targetConn"/>
+    </bean>
 </beans>
