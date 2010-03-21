@@ -8,7 +8,8 @@
                 <!--<ref bean="userTask"/>-->
                 <!--<ref bean="hotlineTask"/>-->
                 <!--<ref bean="mediaPlanTask"/>-->
-                <ref bean="campaignTask"/>
+                <!--<ref bean="campaignTask"/>-->
+                <!--<ref bean="ibCallTask"/>-->
             </list>
         </property>
     </bean>
@@ -47,5 +48,9 @@
             </value>
         </property>
         <property name="saver" ref="campaignSaver"/>
+    </bean>
+    <bean id="ibCallTask" class="task.scae.IBCallTask" autowire="byName">
+        <property name="sql" value="select ib.* from scae_ibcall ib"/>
+        <property name="saver" ref="ibCallSaver"/>
     </bean>
 </beans>
