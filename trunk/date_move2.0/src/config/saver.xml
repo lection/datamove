@@ -9,4 +9,6 @@
     <bean id="budgetSaver" class="saver.BudgetSaver"/>
     <bean id="campaignSaver" class="saver.CampaignSaver" autowire="byName"/>
     <bean id="expandDevelopSaver" class="saver.ExpandDevelopSaver"/>
+    <bean id="ibCallSaver" class="saver.IBCallSaver" autowire="byName"/>
+    <bean id="leadsSaver" class="saver.LeadsSaver" autowire="byName"/>
 </beans>
