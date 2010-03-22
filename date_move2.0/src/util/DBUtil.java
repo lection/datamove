@@ -43,4 +43,17 @@ public class DBUtil {
             ex.printStackTrace();
         }
     }
+
+    public static long getLaskKey(Connection conn,String table){
+        return getLaskKey(conn, table, "c_id");
+    }
+
+    public static long getLaskKey(Connection conn,String table,String column){
+       return (Long)executeQuery(conn, "select max(" + column + ") from " + table, new Query(){
+            public Object execute(ResultSet rs) throws SQLException {
+                rs.next();
+                return rs.getLong(1);
+            }
+        });
+    }
 }

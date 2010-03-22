@@ -10,6 +10,7 @@
                 <!--<ref bean="mediaPlanTask"/>-->
                 <!--<ref bean="campaignTask"/>-->
                 <!--<ref bean="ibCallTask"/>-->
+                <ref bean="leadsTask"/>
             </list>
         </property>
     </bean>
@@ -52,5 +53,15 @@
     <bean id="ibCallTask" class="task.scae.IBCallTask" autowire="byName">
         <property name="sql" value="select ib.* from scae_ibcall ib"/>
         <property name="saver" ref="ibCallSaver"/>
+    </bean>
+    <!--客户档案 注意：在SCAE地址表中加入id为0名称为其他的字段，与未收集地址信息的进行匹配-->
+    <bean id="leadsTask" class="scae.task.LeadsTask" autowire="byName">
+        <property name="sql">
+            <value>
+                select card.*,center.dcenter_name
+                from scae_yellowcard card
+                where card.dcenter_id in (6,31,9,29,2,30,35,4,28,7,32)
+            </value>
+        </property>
     </bean>
 </beans>
