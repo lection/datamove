@@ -16,6 +16,7 @@ import com.linkin.crm.um.model.UserImpl;
 import core.adapter.DataException;
 import core.adapter.J2JTaskSupport;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -107,7 +108,7 @@ public class LeadsTask extends J2JTaskSupport{
                 }
                 cityMap.put(14, 397);//南汇归为浦东
                 cityMap.put(18, 397);//奉贤归为浦东
-//                cityMap.put(19, 703);//崇明归为其他
+                cityMap.put(19, 703);//崇明归为其他
                 cityMap.put(0, 703);//其他
             return null;}});
          DBUtil.executeQuery(getTargetConn(), "select c_code,c_id from t_biz_vo_category where c_org_id="
@@ -202,7 +203,10 @@ public class LeadsTask extends J2JTaskSupport{
         lead.setOriginalLevel(levelMap.get(rs.getString("cycclass")).toString());
         lead.setCurlevel(levelMap.get(rs.getString("ycclass")).toString());
         lead.setExpOrderDur(flMap.get(rs.getString("ycclass")).toString());
-        lead.setNextFLDate(rs.getDate("fl_date"));
+        if("FAIL".equals(lead.getStatus()))
+            lead.setNextFLDate(Date.valueOf("3000-12-31"));
+        else
+            lead.setNextFLDate(rs.getDate("fl_date"));
         lead.setTestDrive(rs.getString("trial").equals("F")?0:1);
         if(lead.getTestDrive() == 1){
             lead.setFeedBack("118");//试驾反馈

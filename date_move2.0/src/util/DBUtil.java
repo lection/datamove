@@ -16,10 +16,15 @@ public class DBUtil {
         Object execute(ResultSet rs) throws SQLException;
     }
 
-    public static void executeUpdate(Connection conn,String sql){
+    public static interface Excute{
+        void execute(PreparedStatement pre) throws SQLException;
+    }
+
+    public static void executeUpdate(Connection conn,String sql,Excute e){
         try {
-            Statement stat = conn.createStatement();
-            stat.executeUpdate(sql);
+            PreparedStatement stat = conn.prepareStatement(sql);
+            e.execute(stat);
+            stat.executeUpdate();
             if(stat != null){
                 stat.close();
             }
@@ -55,6 +60,16 @@ public class DBUtil {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public static void delete(Connection conn,String table,Long id) throws SQLException{
+        delete(conn, table, "c_id",id);
+    }
+
+    public static void delete(Connection conn,String table,String column,Long id) throws SQLException{
+        Statement stat = conn.createStatement();
+        stat.executeUpdate("delete from " + table + " where " + column + "=" + id);
+        if(stat!=null)stat.close();
     }
 
     public static long getLaskKey(Connection conn,String table){
