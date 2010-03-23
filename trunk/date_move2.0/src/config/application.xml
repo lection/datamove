@@ -5,13 +5,14 @@
     <bean id="taskList" class="core.TaskList">
         <property name="taskList">
             <list>
-                <!--<ref bean="userTask"/>-->
-                <!--<ref bean="hotlineTask"/>-->
-                <!--<ref bean="mediaPlanTask"/>-->
-                <!--<ref bean="campaignTask"/>-->
-                <!--<ref bean="ibCallTask"/>-->
-                <!--<ref bean="leadsTask"/>-->
-                <ref bean="flTask"/>
+                <!--<ref bean="userTask"/>
+                <ref bean="hotlineTask"/>-->
+                <!--<ref bean="mediaPlanTask"/>
+                <ref bean="campaignTask"/>
+                <ref bean="ibCallTask"/>-->
+                <!--<ref bean="leadsTask"/>
+                <ref bean="flTask"/>-->
+                <!--<ref bean="failTask"/>-->
             </list>
         </property>
     </bean>
@@ -72,9 +73,19 @@
                 select fl.*,yc.dcenter_id
                 from scae_ycfollowup fl,scae_yellowcard yc
                 where fl.yellowcard_id=yc.id and yc.dcenter_id in (6,31,9,29,2,30,35,4,28,7,32)
-                order by fl.yellowcard_id,fl.no,create_date limit 0,10000
+                order by fl.yellowcard_id,fl.no,create_date
             </value>
         </property>
         <property name="saver" ref="flSaver"/>
+    </bean>
+    <bean id="failTask" class="task.scae.FailTask" autowire="byName">
+        <property name="sql">
+            <value>
+                select fail.*
+                from scae_ycresultf fail,scae_yellowcard card
+                where card.id=fail.yellowcard_id
+                and card.dcenter_id in (6,31,9,29,2,30,35,4,28,7,32)
+            </value>
+        </property>
     </bean>
 </beans>

@@ -33,7 +33,7 @@ public class ExecuteMove {
             task.execute();
             time = System.currentTimeMillis() - time;
             log.info(task.getClass().getSimpleName() + "执行完毕.耗时  " + (int)(time/3600000) + "时 "
-                    + (int)((time%360000)/60000) + "分 " + (int)((time%6000)/1000) + "秒");
+                    + (int)((time%3600000)/60000) + "分 " + (int)((time%60000)/1000) + "秒");
         }
     }
 
