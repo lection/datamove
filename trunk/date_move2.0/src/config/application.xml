@@ -13,6 +13,7 @@
                 <!--<ref bean="leadsTask"/>
                 <ref bean="flTask"/>-->
                 <!--<ref bean="failTask"/>-->
+                <!--<ref bean="orderTask"/>-->
             </list>
         </property>
     </bean>
@@ -87,5 +88,8 @@
                 and card.dcenter_id in (6,31,9,29,2,30,35,4,28,7,32)
             </value>
         </property>
+    </bean>
+    <bean id="orderTask" class="task.scae.OrderTask" autowire="byName">
+        <property name="sql" value="select yc.id from scae_yellowcard yc where yc.status='suc' or yc.status='order'"/>
     </bean>
 </beans>
