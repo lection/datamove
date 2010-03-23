@@ -15,6 +15,19 @@ public class DBUtil {
     public static interface Query{
         Object execute(ResultSet rs) throws SQLException;
     }
+
+    public static void executeUpdate(Connection conn,String sql){
+        try {
+            Statement stat = conn.createStatement();
+            stat.executeUpdate(sql);
+            if(stat != null){
+                stat.close();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public static Object executeQuery(Connection conn,String sql,Query query){
         Object result = null;
         try {

@@ -20,16 +20,18 @@ import util.DBUtil.Query;
 public class OrgUtil {
     private Map<String,InternalOrgImpl> orgAliasMap = new HashMap<String, InternalOrgImpl>();
     private Map<Long,InternalOrgImpl> orgIdMap = new HashMap<Long, InternalOrgImpl>();
+    private Map<Long,InternalOrgImpl> mpmapsIdMap = new HashMap<Long, InternalOrgImpl>();
     private String parent_name;
     private Connection targetConn;
     private Connection sourceConn;
+    private InternalOrgImpl org = new InternalOrgImpl();
 
     public OrgUtil(Connection targetConn, Connection sourceConn,String parent_name) {
         this.targetConn = targetConn;
         this.sourceConn = sourceConn;
         this.parent_name = parent_name;
         DBUtil.executeQuery(targetConn,
-                "select o2.c_id as id,o2.c_alias as name from t_organization o,t_organization o2 where o.c_name='" + parent_name
+                "select o2.c_id as id,o2.c_alias as name,o.c_id as pid from t_organization o,t_organization o2 where o.c_name='" + parent_name
                 + "' and o.c_id=o2.c_parent_id"
                 , new Query(){
             public Object execute(ResultSet rs) throws SQLException{
@@ -37,6 +39,8 @@ public class OrgUtil {
                     InternalOrgImpl org = new InternalOrgImpl();
                     org.setId(rs.getLong("id"));
                     OrgUtil.this.orgAliasMap.put(rs.getString("name"), org);
+                    OrgUtil.this.org.setId(rs.getLong("pid"));
+                    mpmapsIdMap.put(org.getId(), org);
                 }return null;
             }
         });
@@ -60,5 +64,13 @@ public class OrgUtil {
 
     public InternalOrgImpl getOrg(Long id){
         return orgIdMap.get(id);
+    }
+
+    public InternalOrgImpl getMOrg(Long id){
+        return mpmapsIdMap.get(id);
+    }
+
+    public InternalOrgImpl getParentOrg(){
+        return org;
     }
 }

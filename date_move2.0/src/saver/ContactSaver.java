@@ -10,18 +10,21 @@ import com.linkin.crm.customer.model.Contact;
 
 public class ContactSaver extends AbstractSaver{
     public void cap(Object object) throws SQLException{
-        Contact obj = (Contact)object;
+        Object[] objs = (Object[])object;
+        Contact obj = (Contact)objs[0];
         PreparedStatement pre = getPreStat();
-        obj.setId(this.getHiloId());
         pre.setLong(1,obj.getId());
         if(obj.getOrganization() != null)
             pre.setLong(2,obj.getOrganization().getId());
         else pre.setNull(2,Types.BIGINT);
+        if(objs[1] != null)
+            pre.setLong(3,(Long)objs[1]);
+        else pre.setNull(3,Types.BIGINT);
     }
 
     public String getInsertSql(){
         return "insert into t_contact"
-         + " (c_person_id ,c_org_id"
-         +") values(?,?)";
+         + " (c_person_id ,c_org_id,c_cust_id"
+         +") values(?,?,?)";
     }
 }

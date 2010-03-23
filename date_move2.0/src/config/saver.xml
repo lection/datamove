@@ -3,12 +3,16 @@
 		  "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
 <beans>
     <bean id="personSaver" class="saver.PersonImplSaver"/>
-    <bean id="userSaver" class="saver.UserImplSaver" autowire="byName"/>
-    <bean id="hotlineSaver" class="saver.HotlineSaver" autowire="byName"/>
-    <bean id="mediaPlanSaver" class="saver.MediaPlanSaver" autowire="byName"/>
+    <bean id="userSaver" class="saver.UserImplSaver" autowire="byName" lazy-init="true"/>
+    <bean id="hotlineSaver" class="saver.HotlineSaver" autowire="byName" lazy-init="true"/>
+    <bean id="mediaPlanSaver" class="saver.MediaPlanSaver" autowire="byName" lazy-init="true"/>
     <bean id="budgetSaver" class="saver.BudgetSaver"/>
-    <bean id="campaignSaver" class="saver.CampaignSaver" autowire="byName"/>
+    <bean id="campaignSaver" class="saver.CampaignSaver" autowire="byName" lazy-init="true"/>
     <bean id="expandDevelopSaver" class="saver.ExpandDevelopSaver"/>
-    <bean id="ibCallSaver" class="saver.IBCallSaver" autowire="byName"/>
-    <bean id="leadsSaver" class="saver.LeadsSaver" autowire="byName"/>
+    <bean id="ibCallSaver" class="saver.IBCallSaver" autowire="byName" lazy-init="true"/>
+    <bean id="leadsSaver" class="saver.LeadsSaver" autowire="byName" lazy-init="true"/>
+    <bean id="customerSaver" class="saver.CustomerSaver"/>
+    <bean id="contactSaver" class="saver.ContactSaver"/>
+    <bean id="flSaver" class="saver.ContactRecordSaver" autowire="byName" lazy-init="true"/>
+    <bean id="flSaver_temp" class="saver.ContactRecordSaver"/>
 </beans>

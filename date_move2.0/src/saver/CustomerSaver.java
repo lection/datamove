@@ -2,16 +2,15 @@ package saver;
 
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
-import java.sql.Date;
 import java.sql.Types;
 import util.saver.AbstractSaver;
 import java.sql.SQLException;
-import com.linkin.crm.customer.model.Customer;
+import com.linkin.crm.customer.model.IndividuleCustomer;
 
 public class CustomerSaver extends AbstractSaver{
     public CustomerSaver() throws SQLException{initHilo("t_c1_hi_value","c_cust_next_value",10);}
     public void cap(Object object) throws SQLException{
-        Customer obj = (Customer)object;
+        IndividuleCustomer obj = (IndividuleCustomer)object;
         PreparedStatement pre = getPreStat();
         obj.setId(this.getHiloId());
         pre.setLong(1,obj.getId());
@@ -43,11 +42,15 @@ public class CustomerSaver extends AbstractSaver{
         if(obj.getOrganization() != null)
             pre.setLong(13,obj.getOrganization().getId());
         else pre.setNull(13,Types.BIGINT);
+        pre.setString(14, "IND");
+        if(obj.getPerson() != null)
+            pre.setLong(15,obj.getPerson().getId());
+        else pre.setNull(15,Types.BIGINT);
     }
 
     public String getInsertSql(){
         return "insert into t_customer"
-         + " (c_id ,c_name ,c_bzid1 ,c_bzid2 ,c_bzid3 ,c_bzid4 ,c_type ,c_created_by ,c_created_date ,c_updated_by ,c_update_date ,c_owner_id ,c_intorg_id"
-         +") values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+         + " (c_id ,c_name ,c_bzid1 ,c_bzid2 ,c_bzid3 ,c_bzid4 ,c_type ,c_created_by ,c_created_date ,c_updated_by ,c_update_date ,c_owner_id ,c_intorg_id,c_cust_type,c_person_id"
+         +") values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     }
 }
