@@ -10,17 +10,18 @@
                 <!--<ref bean="mediaPlanTask"/>-->
                 <!--<ref bean="campaignTask"/>-->
                 <!--<ref bean="ibCallTask"/>-->
-                <ref bean="leadsTask"/>
+                <!--<ref bean="leadsTask"/>-->
+                <ref bean="flTask"/>
             </list>
         </property>
     </bean>
     <!--用户-->
-    <bean id="userTask" class="task.scae.SaleUserTask" autowire="byName">
+    <bean id="userTask" class="task.scae.SaleUserTask" autowire="byName" lazy-init="true">
         <property name="saver" ref="userSaver"/>
         <property name="parent_name" value="上海销售服务中心"/>
         <property name="sql" value="select user.*,org.dcenter_name from scae_dcentersales user,scae_dcenter org where user.dcenter_id in (6,31,9,29,2,30,35,4,28,7,32) and user.dcenter_id=org.id"/>
     </bean>
-    <bean id="hotlineTask" class="task.scae.HotlineTask" autowire="byName">
+    <bean id="hotlineTask" class="task.scae.HotlineTask" autowire="byName" lazy-init="true">
         <property name="saver" ref="hotlineSaver"/>
         <property name="sql">
             <value>
@@ -30,7 +31,7 @@
             </value>
         </property>
     </bean>
-    <bean id="mediaPlanTask" class="task.scae.MediaPlanTask" autowire="byName">
+    <bean id="mediaPlanTask" class="task.scae.MediaPlanTask" autowire="byName" lazy-init="true">
         <property name="sql">
             <value>
                select m.* from scae_campaignmedia m,scae_campaign c
@@ -39,7 +40,7 @@
         </property>
         <property name="saver" ref="mediaPlanSaver"/>
     </bean>
-    <bean id="campaignTask" class="task.scae.CampaignTask" autowire="byName">
+    <bean id="campaignTask" class="task.scae.CampaignTask" autowire="byName" lazy-init="true">
         <property name="sql">
             <value>
                 select c.*,obj.obj,obj.carmodel_id
@@ -50,18 +51,30 @@
         </property>
         <property name="saver" ref="campaignSaver"/>
     </bean>
-    <bean id="ibCallTask" class="task.scae.IBCallTask" autowire="byName">
+    <bean id="ibCallTask" class="task.scae.IBCallTask" autowire="byName" lazy-init="true">
         <property name="sql" value="select ib.* from scae_ibcall ib"/>
         <property name="saver" ref="ibCallSaver"/>
     </bean>
     <!--客户档案 注意：在SCAE地址表中加入id为0名称为其他的字段，与未收集地址信息的进行匹配-->
-    <bean id="leadsTask" class="scae.task.LeadsTask" autowire="byName">
+    <bean id="leadsTask" class="task.scae.LeadsTask" autowire="byName" lazy-init="true">
         <property name="sql">
             <value>
-                select card.*,center.dcenter_name
+                select card.*
                 from scae_yellowcard card
                 where card.dcenter_id in (6,31,9,29,2,30,35,4,28,7,32)
             </value>
         </property>
+        <property name="saver" ref="leadsSaver"/>
+    </bean>
+    <bean id="flTask" class="task.scae.FollowTask" autowire="byName" lazy-init="true">
+        <property name="sql">
+            <value>
+                select fl.*,yc.dcenter_id
+                from scae_ycfollowup fl,scae_yellowcard yc
+                where fl.yellowcard_id=yc.id and yc.dcenter_id in (6,31,9,29,2,30,35,4,28,7,32)
+                order by fl.yellowcard_id,fl.no,create_date limit 0,10000
+            </value>
+        </property>
+        <property name="saver" ref="flSaver"/>
     </bean>
 </beans>

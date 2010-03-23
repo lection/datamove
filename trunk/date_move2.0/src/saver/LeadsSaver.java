@@ -1,5 +1,6 @@
 package saver;
 
+import com.linkin.crm.sales.model.ContactRecord;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.sql.Date;
@@ -9,6 +10,9 @@ import java.sql.SQLException;
 import com.linkin.crm.sales.model.Leads;
 
 public class LeadsSaver extends AbstractSaver{
+
+    private ContactRecordSaver flSaver_temp;
+
     public LeadsSaver() throws SQLException{initHilo("t_l1_hi_value","c_next_value",10);}
     public void cap(Object object) throws SQLException{
         Leads obj = (Leads)object;
@@ -146,14 +150,37 @@ public class LeadsSaver extends AbstractSaver{
         if(obj.getUser() != null)
             pre.setLong(59,obj.getUser().getId());
         else pre.setNull(59,Types.BIGINT);
-        if(obj.getOrder() != null)
-            pre.setLong(60,obj.getOrder().getId());
-        else pre.setNull(60,Types.BIGINT);
+    }
+
+    @Override
+    public void save(Object object) throws SQLException {
+        Leads obj = (Leads)object;
+        super.save(obj);
+        for(ContactRecord cr:obj.getContactRecords()){
+            flSaver_temp.save(cr);
+        }
+    }
+
+    @Override
+    public void destory() throws SQLException {
+        super.destory();
+        flSaver_temp.destory();
+    }
+
+    @Override
+    public void init() throws SQLException {
+        super.init();
+        flSaver_temp.setTargetConn(getTargetConn());
+        flSaver_temp.init();
     }
 
     public String getInsertSql(){
         return "insert into t_leads"
-         + " (c_id ,c_color ,c_concern_points ,c_status ,c_register_date ,c_expOrder_dur ,c_expvisit_dur ,c_expvisit_date ,c_curlevel ,c_original_level ,c_next_fldate ,c_testdrive ,c_feedback ,c_dealed ,c_curowned_car ,c_curowned_caryear ,c_curowned_carlic ,c_requirelic ,c_custpref ,c_comp_brand ,c_comp_car ,c_concern_compare ,c_budget ,c_payapproach ,c_curr_prep ,c_contact_venue ,c_already_visited_dlr ,c_register_channel ,c_info_channel ,c_knsource ,c_number ,c_buy_seq ,c_buy_usedcars ,c_visited_dlr ,c_visited_dlr_name ,c_pricing ,c_payType ,c_memo ,c_ext_long1 ,c_ext_long2 ,c_ext_long3 ,c_ext_str1 ,c_ext_str2 ,c_ext_str3 ,c_ext_str4 ,c_ext_dt1 ,c_ext_dt2 ,c_ext_dt3 ,c_created_by ,c_created_date ,c_updated_by ,c_update_date ,c_cust_id ,c_contact_id ,c_productcat_id ,c_product_id ,c_orig_product_id ,c_campaign_id ,c_user_id ,"
-         +") values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+         + " (c_id ,c_color ,c_concern_points ,c_status ,c_register_date ,c_expOrder_dur ,c_expvisit_dur ,c_expvisit_date ,c_curlevel ,c_original_level ,c_next_fldate ,c_testdrive ,c_feedback ,c_dealed ,c_curowned_car ,c_curowned_caryear ,c_curowned_carlic ,c_requirelic ,c_custpref ,c_comp_brand ,c_comp_car ,c_concern_compare ,c_budget ,c_payapproach ,c_curr_prep ,c_contact_venue ,c_already_visited_dlr ,c_register_channel ,c_info_channel ,c_knsource ,c_number ,c_buy_seq ,c_buy_usedcars ,c_visited_dlr ,c_visited_dlr_name ,c_pricing ,c_payType ,c_memo ,c_ext_long1 ,c_ext_long2 ,c_ext_long3 ,c_ext_str1 ,c_ext_str2 ,c_ext_str3 ,c_ext_str4 ,c_ext_dt1 ,c_ext_dt2 ,c_ext_dt3 ,c_created_by ,c_created_date ,c_updated_by ,c_update_date ,c_cust_id ,c_contact_id ,c_productcat_id ,c_product_id ,c_orig_product_id ,c_campaign_id ,c_user_id"
+         +") values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    }
+
+    public void setFlSaver_temp(ContactRecordSaver flSaver_temp) {
+        this.flSaver_temp = flSaver_temp;
     }
 }
