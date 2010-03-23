@@ -14,6 +14,7 @@
                 <ref bean="flTask"/>-->
                 <!--<ref bean="failTask"/>-->
                 <!--<ref bean="orderTask"/>-->
+                <ref bean="lead2ibcall"/>
             </list>
         </property>
     </bean>
@@ -79,7 +80,7 @@
         </property>
         <property name="saver" ref="flSaver"/>
     </bean>
-    <bean id="failTask" class="task.scae.FailTask" autowire="byName">
+    <bean id="failTask" class="task.scae.FailTask" autowire="byName" lazy-init="true">
         <property name="sql">
             <value>
                 select fail.*
@@ -89,7 +90,10 @@
             </value>
         </property>
     </bean>
-    <bean id="orderTask" class="task.scae.OrderTask" autowire="byName">
+    <bean id="orderTask" class="task.scae.OrderTask" autowire="byName" lazy-init="true">
         <property name="sql" value="select yc.id from scae_yellowcard yc where yc.status='suc' or yc.status='order'"/>
+    </bean>
+    <bean id="lead2ibcall" class="task.scae.Leads2IBCall" autowire="byName" lazy-init="true">
+        <property name="ibcall_id" value="243"/>
     </bean>
 </beans>
