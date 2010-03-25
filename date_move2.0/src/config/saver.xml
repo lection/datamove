@@ -3,7 +3,12 @@
 		  "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
 <beans>
     <bean id="saver" class="saver.Saver" autowire="byName" lazy-init="true"/>
-    <bean id="personSaver" class="saver.PersonImplSaver"/>
+    <bean id="caSaver" class="saver.ContactAddSaver"/>
+    <bean id="addSaver" class="saver.AddressSaver"/>
+    <bean id="personSaver" class="saver.PersonImplSaver">
+        <property name="addSaver" ref="addSaver"/>
+        <property name="caSaver" ref="caSaver"/>
+    </bean>
     <bean id="userSaver" class="saver.UserImplSaver" autowire="byName" lazy-init="true"/>
     <bean id="hotlineSaver" class="saver.HotlineSaver" autowire="byName" lazy-init="true"/>
     <bean id="mediaPlanSaver" class="saver.MediaPlanSaver" autowire="byName" lazy-init="true"/>
@@ -16,4 +21,5 @@
     <bean id="contactSaver" class="saver.ContactSaver"/>
     <bean id="flSaver" class="saver.ContactRecordSaver" autowire="byName" lazy-init="true"/>
     <bean id="flSaver_temp" class="saver.ContactRecordSaver"/>
+    <bean id="orderSaver" class="saver.OrderSaver" autowire="byName" lazy-init="true"/>
 </beans>

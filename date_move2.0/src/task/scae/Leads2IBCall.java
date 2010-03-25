@@ -6,6 +6,7 @@
 package task.scae;
 
 import com.linkin.crm.comm.model.IBCall;
+import java.sql.PreparedStatement;
 import core.Task;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,6 +16,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import util.DBUtil;
 
 /**
@@ -24,6 +27,7 @@ import util.DBUtil;
 public class Leads2IBCall implements Task{
     private Map<Long,Map<String,Map<String,List<IBCall>>>> ibcallMap =
             new HashMap<Long,Map<String,Map<String,List<IBCall>>>>();
+    private List<IBCall> ibCallList = new ArrayList<IBCall>();
     private long ibcall_id;
     private long leads_id;
     private Connection targetConn;
@@ -57,7 +61,12 @@ public class Leads2IBCall implements Task{
                         ibcallMap.get(org_id).get(date_str).put(ibno, new ArrayList<IBCall>());
                     }
                     ibcallMap.get(org_id).get(date_str).get(ibno).add(ibcall);
+                    ibCallList.add(ibcall);
                 }
+                for(Long l:ibcallMap.keySet()){
+                    System.out.print(l+",");
+                }
+                System.out.println();
         return null;}});
         DBUtil.executeQuery(targetConn, 
         "select l.c_id,l.c_register_date,u.c_org_id,p.c_phone1,p.c_sphone1_ac,p.c_sphone1,p.c_phone2,p.c_sphone2_ac,p.c_sphone2 "
@@ -99,11 +108,41 @@ public class Leads2IBCall implements Task{
                             }
                             else{
                                 suc++;
+                                for(IBCall i:list){
+                                    if(i.getLeads()==null||i.getLeads().trim().length()==0){
+                                        i.setLeads(rs.getString("c_id"));
+                                    }else{
+                                        i.setLeads(i.getLeads()+","+rs.getString("c_id"));
+                                    }
+                                }
                             }
                         }
                     }
                 }
         return null;}});
+        try {
+            PreparedStatement pre = targetConn.prepareStatement(
+                    "update t_ibcall set c_leads=? where c_id=?");
+            int count = 0;
+            for(IBCall ibcall:ibCallList){
+                if(ibcall.getLeads() != null && ibcall.getLeads().trim().length()!=0){
+                    pre.setString(1, ibcall.getLeads());
+                    pre.setLong(2, ibcall.getId());
+                    pre.addBatch();
+                    count++;
+                    System.out.println(count);
+                }
+                if(count%30==0){
+                    pre.executeBatch();
+                }
+            }
+            pre.executeBatch();
+            pre.close();
+            targetConn.commit();
+        } catch (SQLException ex) {
+            new RuntimeException(ex);
+        }
+        DBUtil.close(targetConn);
         System.out.println("成功 " + suc +"  失败 " + fail);
     }
 

@@ -9,12 +9,12 @@
                 <ref bean="hotlineTask"/>-->
                 <!--<ref bean="mediaPlanTask"/>
                 <ref bean="campaignTask"/>
-                <ref bean="ibCallTask"/>-->
-                <!--<ref bean="leadsTask"/>
-                <ref bean="flTask"/>-->
-                <!--<ref bean="failTask"/>-->
-                <!--<ref bean="orderTask"/>-->
-                <ref bean="lead2ibcall"/>
+                <ref bean="ibCallTask"/>
+                <ref bean="leadsTask"/>-->
+                <!--<ref bean="flTask"/>-->
+                <!--<ref bean="failTask"/>
+                <ref bean="orderTask"/>
+                <ref bean="lead2ibcall"/>-->
             </list>
         </property>
     </bean>
@@ -56,6 +56,7 @@
     </bean>
     <bean id="ibCallTask" class="task.scae.IBCallTask" autowire="byName" lazy-init="true">
         <property name="sql" value="select ib.* from scae_ibcall ib"/>
+        <property name="orgs" value="6,31,9,29,2,30,35,4,28,7,32"/>
         <property name="saver" ref="ibCallSaver"/>
     </bean>
     <!--客户档案 注意：在SCAE地址表中加入id为0名称为其他的字段，与未收集地址信息的进行匹配-->
@@ -91,7 +92,15 @@
         </property>
     </bean>
     <bean id="orderTask" class="task.scae.OrderTask" autowire="byName" lazy-init="true">
-        <property name="sql" value="select yc.id from scae_yellowcard yc where yc.status='suc' or yc.status='order'"/>
+        <property name="sql">
+            <value>
+                select yc.id
+                from scae_yellowcard yc
+                where (yc.status='suc' or yc.status='order')
+                and yc.dcenter_id in (6,31,9,29,2,30,35,4,28,7,32)
+            </value>
+        </property>
+        <property name="saver" ref="orderSaver"/>
     </bean>
     <bean id="lead2ibcall" class="task.scae.Leads2IBCall" autowire="byName" lazy-init="true">
         <property name="ibcall_id" value="243"/>

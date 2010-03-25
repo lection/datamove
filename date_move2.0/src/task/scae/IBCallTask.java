@@ -12,7 +12,10 @@ import core.adapter.J2JTaskSupport;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 import util.HotlineUtil;
+import util.OrgUtil;
 
 /**
  *
@@ -20,6 +23,17 @@ import util.HotlineUtil;
  */
 public class IBCallTask extends J2JTaskSupport{
     private HotlineUtil hotlineUtil;
+    private OrgUtil orgUtil;
+    private String orgs;
+    private Set<Long> set = new HashSet<Long>();
+
+    @Override
+    public void init() throws Exception {
+        super.init();
+        for(String s:orgs.split(",")){
+            set.add(orgUtil.getOrg(Long.valueOf(s)).getId());
+        }
+    }
     
     @Override
     public Object parse(Connection conn, ResultSet rs) throws DataException, SQLException {
@@ -27,7 +41,7 @@ public class IBCallTask extends J2JTaskSupport{
         ibcall.setCallno(rs.getString("callno"));
         ibcall.setStartTime(rs.getTimestamp("ibtime"));
         Hotline hotline = hotlineUtil.getHotline(ibcall.getCallno(), ibcall.getStartTime());
-        if(hotline == null)throw new DataException(null);
+        if(hotline == null || !set.contains(hotline.getOrg().getId()))throw new DataException(null);
         ibcall.setOrg(hotline.getOrg());
         ibcall.setIbno(rs.getString("ibno"));
         ibcall.setEndTime(rs.getTimestamp("endtime"));
@@ -50,6 +64,14 @@ public class IBCallTask extends J2JTaskSupport{
 
     public void setHotlineUtil(HotlineUtil hotlineUtil) {
         this.hotlineUtil = hotlineUtil;
+    }
+
+    public void setOrgUtil(OrgUtil orgUtil) {
+        this.orgUtil = orgUtil;
+    }
+
+    public void setOrgs(String orgs) {
+        this.orgs = orgs;
     }
 
 }

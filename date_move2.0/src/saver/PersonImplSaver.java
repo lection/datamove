@@ -1,5 +1,6 @@
 package saver;
 
+import com.linkin.crm.core.model.Address;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.sql.Date;
@@ -9,6 +10,25 @@ import java.sql.SQLException;
 import com.linkin.crm.core.model.PersonImpl;
 
 public class PersonImplSaver extends AbstractSaver{
+    private AddressSaver addSaver;
+    private ContactAddSaver caSaver;
+
+    @Override
+    public void destory() throws SQLException {
+        super.destory();
+        addSaver.destory();
+        caSaver.destory();
+    }
+
+    @Override
+    public void init() throws SQLException {
+        addSaver.setTargetConn(getTargetConn());
+        caSaver.setTargetConn(getTargetConn());
+        super.init();
+        addSaver.init();
+        caSaver.init();
+    }
+
     public PersonImplSaver() throws SQLException{
         initHilo("t_n1_hi_value","c_psn_next_hi_value",10);
     }
@@ -87,11 +107,33 @@ public class PersonImplSaver extends AbstractSaver{
         if(obj.getUpdateDate() != null)
             pre.setTimestamp(33,new Timestamp(obj.getUpdateDate().getTime()));
         else pre.setTimestamp(33,null);
+        if(obj.getAddresses()!=null)
+            for(Address add:obj.getAddresses()){
+                addSaver.save(add);
+            }
+    }
+
+    @Override
+    public void save(Object object) throws SQLException {
+        super.save(object);
+        PersonImpl obj = (PersonImpl)object;
+        if(obj.getAddresses()!=null)
+            for(Address add:obj.getAddresses()){
+                caSaver.save(new Long[]{obj.getId(),add.getId()});
+            }
     }
 
     public String getInsertSql(){
         return "insert into t_person"
          + " (c_id ,c_lastname ,c_firstname ,c_sex ,c_birthday ,c_age ,c_agerange ,c_phone1 ,c_sphone1_ac ,c_sphone1 ,c_sphone1_ext ,c_phone2 ,c_sphone2_ac ,c_sphone2 ,c_sphone2_ext ,c_email ,c_industry ,c_title ,c_company ,c_ext_long1 ,c_ext_long2 ,c_ext_long3 ,c_ext_str1 ,c_ext_str2 ,c_ext_str3 ,c_ext_str4 ,c_ext_dt1 ,c_ext_dt2 ,c_ext_dt3 ,c_created_by ,c_created_date ,c_updated_by ,c_update_date"
          +") values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    }
+
+    public void setAddSaver(AddressSaver addSaver) {
+        this.addSaver = addSaver;
+    }
+
+    public void setCaSaver(ContactAddSaver caSaver) {
+        this.caSaver = caSaver;
     }
 }
