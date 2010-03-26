@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import com.linkin.crm.customer.model.Contact;
 
 public class ContactSaver extends AbstractSaver{
-    public void cap(Object object) throws SQLException{
+    public Object cap(Object object) throws SQLException{
         Object[] objs = (Object[])object;
         Contact obj = (Contact)objs[0];
         PreparedStatement pre = getPreStat();
@@ -20,6 +20,7 @@ public class ContactSaver extends AbstractSaver{
         if(objs[1] != null)
             pre.setLong(3,(Long)objs[1]);
         else pre.setNull(3,Types.BIGINT);
+        return null;
     }
 
     public String getInsertSql(){

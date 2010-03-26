@@ -5,6 +5,7 @@
 
 package core.adapter;
 
+import com.sun.java_cup.internal.production;
 import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -21,12 +22,14 @@ import util.saver.Saver;
  * @author Lection <yujw@linkinways.com>
  */
 public abstract class J2JTaskSupport extends SimpleTask{
-    private static final Log log = LogFactory.getLog(J2JTaskSupport.class);
     private Connection sourceConn;
     private Statement sourceStmt;
     private ResultSet sourceRs;
     private String sql;
     private Saver saver;
+    private Log log;
+    private Long source_id;
+    private Long target_id;
 
     @Override
     public Object readIn() {
@@ -64,18 +67,18 @@ public abstract class J2JTaskSupport extends SimpleTask{
 
     @Override
     public void store(Object object) throws SQLException {
-        saver.save(object);
+        target_id  = (Long)saver.save(object);
     }
 
     @Override
     public void errorHandle(DataException ex) {
-        log.error(ex.getErrorObject());
     }
 
     @Override
     public void init() throws Exception{
         try {
             saver.init();
+            log = LogFactory.getLog(this.getClass());
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new RuntimeException(ex.getMessage());
@@ -99,6 +102,8 @@ public abstract class J2JTaskSupport extends SimpleTask{
 
     @Override
     public void afterStore() throws Exception {
+        if(source_id!=null&&target_id!=null)
+            log.info(source_id + "\t" + target_id);
     }
 
     public Saver getSaver() {
@@ -127,5 +132,9 @@ public abstract class J2JTaskSupport extends SimpleTask{
 
     public Connection getTargetConn() {
         return saver.getConn();
+    }
+
+    public void setSource_id(Long source_id) {
+        this.source_id = source_id;
     }
 }

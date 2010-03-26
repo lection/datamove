@@ -10,7 +10,7 @@ import com.linkin.crm.sales.model.Order;
 
 public class OrderSaver extends AbstractSaver{
     public OrderSaver() throws SQLException{initHilo("t_01_hi_value","next_value",10);}
-    public void cap(Object object) throws SQLException{
+    public Object cap(Object object) throws SQLException{
         Order obj = (Order)object;
         PreparedStatement pre = getPreStat();
         obj.setId(this.getHiloId());
@@ -79,6 +79,7 @@ public class OrderSaver extends AbstractSaver{
         if(obj.getLeads() != null)
             pre.setLong(27,obj.getLeads().getId());
         else pre.setNull(27,Types.BIGINT);
+        return obj.getId();
     }
 
     public String getInsertSql(){

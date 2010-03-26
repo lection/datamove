@@ -81,6 +81,7 @@ public class SaleUserTask extends J2JTaskSupport{
     public Object parse(Connection conn, ResultSet rs) throws DataException {
         UserImpl user = new UserImpl();
         try {
+            setSource_id(rs.getLong("id"));//记录日志
             user.setLastname(rs.getString("sales_name"));
             user.setIntOrg(orgMap.get(rs.getString("dcenter_name")));
             user.setTenent(tenent);

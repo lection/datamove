@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
+import util.DBUtil;
 import util.HotlineUtil;
 import util.OrgUtil;
 
@@ -37,6 +38,7 @@ public class IBCallTask extends J2JTaskSupport{
     
     @Override
     public Object parse(Connection conn, ResultSet rs) throws DataException, SQLException {
+        setSource_id(rs.getLong("id"));//记录日志
         IBCall ibcall = new IBCall();
         ibcall.setCallno(rs.getString("callno"));
         ibcall.setStartTime(rs.getTimestamp("ibtime"));
@@ -52,6 +54,7 @@ public class IBCallTask extends J2JTaskSupport{
         ibcall.setCreatedBy(rs.getString("created_by"));
         ibcall.setCreatedDate(rs.getDate("create_date"));
         ibcall.setVisible(true);
+        ibcall.setId(DBUtil.getLaskKey(getTargetConn(), "t_ibcall"));
         return ibcall;
     }
 

@@ -9,7 +9,7 @@ import com.linkin.crm.customer.model.IndividuleCustomer;
 
 public class CustomerSaver extends AbstractSaver{
     public CustomerSaver() throws SQLException{initHilo("t_c1_hi_value","c_cust_next_value",10);}
-    public void cap(Object object) throws SQLException{
+    public Object cap(Object object) throws SQLException{
         IndividuleCustomer obj = (IndividuleCustomer)object;
         PreparedStatement pre = getPreStat();
         obj.setId(this.getHiloId());
@@ -46,6 +46,7 @@ public class CustomerSaver extends AbstractSaver{
         if(obj.getPerson() != null)
             pre.setLong(15,obj.getPerson().getId());
         else pre.setNull(15,Types.BIGINT);
+        return null;
     }
 
     public String getInsertSql(){

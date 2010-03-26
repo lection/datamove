@@ -10,8 +10,8 @@
                 <!--<ref bean="mediaPlanTask"/>
                 <ref bean="campaignTask"/>
                 <ref bean="ibCallTask"/>
-                <ref bean="leadsTask"/>-->
-                <!--<ref bean="flTask"/>-->
+                <ref bean="leadsTask"/>
+                <ref bean="flTask"/>-->
                 <!--<ref bean="failTask"/>
                 <ref bean="orderTask"/>
                 <ref bean="lead2ibcall"/>-->

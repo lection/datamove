@@ -32,7 +32,7 @@ public class PersonImplSaver extends AbstractSaver{
     public PersonImplSaver() throws SQLException{
         initHilo("t_n1_hi_value","c_psn_next_hi_value",10);
     }
-    public void cap(Object object) throws SQLException{
+    public Object cap(Object object) throws SQLException{
         PersonImpl obj = (PersonImpl)object;
         PreparedStatement pre = getPreStat();
         obj.setId(this.getHiloId());//加入主键值
@@ -111,16 +111,18 @@ public class PersonImplSaver extends AbstractSaver{
             for(Address add:obj.getAddresses()){
                 addSaver.save(add);
             }
+        return obj.getId();
     }
 
     @Override
-    public void save(Object object) throws SQLException {
+    public Object save(Object object) throws SQLException {
         super.save(object);
         PersonImpl obj = (PersonImpl)object;
         if(obj.getAddresses()!=null)
             for(Address add:obj.getAddresses()){
                 caSaver.save(new Long[]{obj.getId(),add.getId()});
             }
+        return obj.getId();
     }
 
     public String getInsertSql(){

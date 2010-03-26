@@ -10,7 +10,7 @@ import com.linkin.crm.core.model.Address;
 import util.DBUtil;
 
 public class AddressSaver extends AbstractSaver{
-    public void cap(Object object) throws SQLException{
+    public Object cap(Object object) throws SQLException{
         Address obj = (Address)object;
         PreparedStatement pre = getPreStat();
         pre.setNull(1, Types.BIGINT);
@@ -32,12 +32,14 @@ public class AddressSaver extends AbstractSaver{
         catch(NullPointerException ex){pre.setNull(9,Types.INTEGER);}
         try{pre.setString(10,obj.getFax());}
         catch(NullPointerException ex){pre.setNull(10,Types.INTEGER);}
+        return obj.getId();
     }
 
     @Override
-    public void save(Object object) throws SQLException {
+    public Object save(Object object) throws SQLException {
         super.save(object);
         ((Address)object).setId(DBUtil.getLaskKey(getTargetConn(), "t_address"));
+        return null;
     }
 
     public String getInsertSql(){

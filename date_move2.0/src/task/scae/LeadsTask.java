@@ -164,6 +164,7 @@ public class LeadsTask extends J2JTaskSupport{
 
     @Override
     public Object parse(Connection conn, ResultSet rs) throws DataException, SQLException {
+        setSource_id(rs.getLong("id"));//记录日志
         Leads lead = new Leads();
         //特殊标示字段
         lead.setP_ext_str1(rs.getString("id"));

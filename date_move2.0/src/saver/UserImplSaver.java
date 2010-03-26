@@ -12,7 +12,7 @@ public class UserImplSaver extends AbstractSaver{
 
     private PersonImplSaver personSaver;
 
-    public void cap(Object object) throws SQLException{
+    public Object cap(Object object) throws SQLException{
         UserImpl obj = (UserImpl)object;
         personSaver.save(obj);
         PreparedStatement pre = getPreStat();
@@ -47,6 +47,7 @@ public class UserImplSaver extends AbstractSaver{
         if(obj.getTenent() != null)
             pre.setLong(13,obj.getTenent().getId());
         else pre.setNull(13,Types.BIGINT);
+        return obj.getId();
     }
 
     public String getInsertSql(){

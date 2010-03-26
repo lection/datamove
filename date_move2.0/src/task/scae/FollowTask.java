@@ -64,6 +64,7 @@ public class FollowTask extends J2JTaskSupport{
 
     @Override
     public Object parse(Connection conn, ResultSet rs) throws DataException, SQLException {
+        setSource_id(rs.getLong("id"));//记录日志
         ContactRecord record = new ContactRecord();
         String lead_id = rs.getString("yellowcard_id");
         record.setLeads(leadsMap.get(lead_id));

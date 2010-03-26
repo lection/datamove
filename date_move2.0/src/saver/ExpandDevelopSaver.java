@@ -11,7 +11,7 @@ import util.saver.AbstractSaver;
 
 public class ExpandDevelopSaver extends AbstractSaver{
     public ExpandDevelopSaver() throws SQLException{initHilo("t_s2_hi_value","next_value",100);}
-    public void cap(Object object) throws SQLException{
+    public Object cap(Object object) throws SQLException{
         ExpandDevelop obj = (ExpandDevelop)object;
         PreparedStatement pre = getPreStat();
         obj.setId(this.getHiloId());
@@ -21,6 +21,7 @@ public class ExpandDevelopSaver extends AbstractSaver{
         if(obj.getProductCategory() != null)
             pre.setLong(3,obj.getProductCategory().getId());
         else pre.setNull(3,Types.BIGINT);
+        return null;
     }
 
     public String getInsertSql(){

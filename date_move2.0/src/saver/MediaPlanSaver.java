@@ -11,7 +11,7 @@ import com.linkin.crm.campaign.model.MediaPlan;
 public class MediaPlanSaver extends AbstractSaver{
     private BudgetSaver budgetSaver;
     public MediaPlanSaver() throws SQLException{initHilo("t_m2_hi_value","next_value",100);}
-    public void cap(Object object) throws SQLException{
+    public Object cap(Object object) throws SQLException{
         MediaPlan obj = (MediaPlan)object;
         PreparedStatement pre = getPreStat();
         obj.setId(this.getHiloId());
@@ -39,6 +39,7 @@ public class MediaPlanSaver extends AbstractSaver{
         if(obj.getOrg() != null)
             pre.setLong(10,obj.getOrg().getId());
         else pre.setNull(10,Types.BIGINT);
+        return obj.getId();
     }
 
     public String getInsertSql(){
@@ -48,12 +49,13 @@ public class MediaPlanSaver extends AbstractSaver{
     }
 
     @Override
-    public void save(Object object) throws SQLException {
+    public Object save(Object object) throws SQLException {
         super.save(object);
         for(Budget budget:((MediaPlan)object).getMediaBudget()){
             budget.setMediaPlan((MediaPlan)object);
             budgetSaver.save(budget);
         }
+        return ((MediaPlan)object).getId();
     }
 
     @Override

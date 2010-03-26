@@ -29,10 +29,10 @@ public abstract class AbstractSaver implements Saver{
 
     public abstract String getInsertSql();
 
-    public abstract void cap(Object object) throws SQLException;
+    public abstract Object cap(Object object) throws SQLException;
 
-    public void save(Object object) throws SQLException {
-        cap(object);
+    public Object save(Object object) throws SQLException {
+        Object result = cap(object);
         this.preStat.executeUpdate();
 //        this.preStat.addBatch();
 //        count++;
@@ -40,6 +40,7 @@ public abstract class AbstractSaver implements Saver{
 //            this.preStat.executeBatch();
 //            count = 0;
 //        }
+        return result;
     }
 
     protected long getHiloId() throws SQLException{

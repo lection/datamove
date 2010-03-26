@@ -16,7 +16,7 @@ public class Saver implements util.saver.Saver{
 
     private Connection targetConn;
 
-    public void save(Object object) throws SQLException {}
+    public Object save(Object object) throws SQLException {return null;}
 
     public void init() throws SQLException {
         targetConn.setAutoCommit(false);

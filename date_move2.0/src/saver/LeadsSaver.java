@@ -14,7 +14,7 @@ public class LeadsSaver extends AbstractSaver{
     private ContactRecordSaver flSaver_temp;
 
     public LeadsSaver() throws SQLException{initHilo("t_l1_hi_value","c_next_value",10);}
-    public void cap(Object object) throws SQLException{
+    public Object cap(Object object) throws SQLException{
         Leads obj = (Leads)object;
         PreparedStatement pre = getPreStat();
         obj.setId(this.getHiloId());
@@ -150,15 +150,17 @@ public class LeadsSaver extends AbstractSaver{
         if(obj.getUser() != null)
             pre.setLong(59,obj.getUser().getId());
         else pre.setNull(59,Types.BIGINT);
+        return obj.getId();
     }
 
     @Override
-    public void save(Object object) throws SQLException {
+    public Object save(Object object) throws SQLException {
         Leads obj = (Leads)object;
         super.save(obj);
         for(ContactRecord cr:obj.getContactRecords()){
             flSaver_temp.save(cr);
         }
+        return obj.getId();
     }
 
     @Override
