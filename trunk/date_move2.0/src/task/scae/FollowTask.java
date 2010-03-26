@@ -78,7 +78,7 @@ public class FollowTask extends J2JTaskSupport{
                     pre.setLong(2, leadsMap.get(id_backup).getId());
                 }
             });
-            if(recordBak2!=null&&!recordBak2.getNextDate().after(contactDate)){
+            if(recordBak2!=null&&!recordBak2.getNextDate().after(contactDate)&&"SUC".equals(recordBak2.getResult())){
                 DBUtil.executeUpdate(getTargetConn(), "update t_leads set c_next_fldate=? where c_id=?", new DBUtil.Excute() {
                 public void execute(PreparedStatement pre) throws SQLException {
                     pre.setDate(1, java.sql.Date.valueOf("3000-12-31"));
