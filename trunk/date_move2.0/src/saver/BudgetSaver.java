@@ -10,7 +10,7 @@ import com.linkin.crm.campaign.model.Budget;
 
 public class BudgetSaver extends AbstractSaver{
     public BudgetSaver() throws SQLException{initHilo("t_s2_hi_value","next_value",100);}
-    public void cap(Object object) throws SQLException{
+    public Object cap(Object object) throws SQLException{
         Budget obj = (Budget)object;
         PreparedStatement pre = getPreStat();
         obj.setId(this.getHiloId());
@@ -25,6 +25,7 @@ public class BudgetSaver extends AbstractSaver{
         else{pre.setNull(5, Types.BIGINT);}
         if(obj.getMediaPlan()!=null){pre.setLong(6, obj.getMediaPlan().getId());}
         else{pre.setNull(6, Types.BIGINT);}
+        return null;
     }
 
     public String getInsertSql(){

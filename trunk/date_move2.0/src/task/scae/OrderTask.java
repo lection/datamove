@@ -91,6 +91,7 @@ public class OrderTask extends J2JTaskSupport{
 
     @Override
     public Object parse(Connection conn, ResultSet rs) throws DataException, SQLException {
+        setSource_id(rs.getLong("id"));//记录日志
         Order order = new Order();
         order.setLeads(leadsMap.get(rs.getString("id")));//跟进意向
         ContactRecord cr = recordMap.get(order.getLeads().getId());

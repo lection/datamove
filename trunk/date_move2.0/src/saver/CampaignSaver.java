@@ -14,7 +14,7 @@ public class CampaignSaver extends AbstractSaver{
     private BudgetSaver budgetSaver;
     private Campaign cam;
     public CampaignSaver() throws SQLException{initHilo("t_c3_hi_value","c_next_value",100);}
-    public void cap(Object object) throws SQLException{
+    public Object cap(Object object) throws SQLException{
         Campaign obj = (Campaign)object;
         PreparedStatement pre = getPreStat();
         obj.setId(this.getHiloId());
@@ -48,6 +48,7 @@ public class CampaignSaver extends AbstractSaver{
         if(obj.getOrg() != null)
             pre.setLong(14,obj.getOrg().getId());
         else pre.setNull(14,Types.BIGINT);
+        return obj.getId();
     }
 
     public String getInsertSql(){
@@ -57,7 +58,7 @@ public class CampaignSaver extends AbstractSaver{
     }
 
     @Override
-    public void save(Object object) throws SQLException {
+    public Object save(Object object) throws SQLException {
         Campaign  c = (Campaign)object;
         if(cam==null || c!=cam){
             super.save(c);
@@ -71,6 +72,7 @@ public class CampaignSaver extends AbstractSaver{
                 expandDevelopSaver.save(ex);
             }
         }
+        return c.getId();
     }
 
     @Override

@@ -26,6 +26,7 @@ public abstract class SimpleTask implements Task{
             while((object = this.readIn()) != null){
                 try{
                     this.store(this.parse(object));
+                    this.afterStore();
                     count ++;
                 }catch(DataException ex){
                     this.errorHandle(ex);

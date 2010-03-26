@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import com.linkin.crm.comm.model.IBCall;
 
 public class IBCallSaver extends AbstractSaver{
-    public void cap(Object object) throws SQLException{
+    public Object cap(Object object) throws SQLException{
         IBCall obj = (IBCall)object;
         PreparedStatement pre = getPreStat();
         pre.setNull(1, Types.BIGINT);
@@ -62,6 +62,7 @@ public class IBCallSaver extends AbstractSaver{
         if(obj.getOrg() != null)
             pre.setLong(22,obj.getOrg().getId());
         else pre.setNull(22,Types.BIGINT);
+        return obj.getId();
     }
 
     public String getInsertSql(){

@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import com.linkin.crm.core.model.Hotline;
 
 public class HotlineSaver extends AbstractSaver{
-    public void cap(Object object) throws SQLException{
+    public Object cap(Object object) throws SQLException{
         Hotline obj = (Hotline)object;
         PreparedStatement pre = getPreStat();
         pre.setNull(1, Types.BIGINT);
@@ -53,6 +53,7 @@ public class HotlineSaver extends AbstractSaver{
         if(obj.getOrg() != null)
             pre.setLong(17,obj.getOrg().getId());
         else pre.setNull(17,Types.BIGINT);
+        return null;
     }
 
     public String getInsertSql(){

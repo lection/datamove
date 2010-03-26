@@ -10,7 +10,7 @@ import com.linkin.crm.sales.model.ContactRecord;
 
 public class ContactRecordSaver extends AbstractSaver{
     public ContactRecordSaver() throws SQLException{initHilo("t_c2_hi_value","next_value",10);}
-    public void cap(Object object) throws SQLException{
+    public Object cap(Object object) throws SQLException{
         ContactRecord obj = (ContactRecord)object;
         PreparedStatement pre = getPreStat();
         obj.setId(this.getHiloId());
@@ -102,6 +102,7 @@ public class ContactRecordSaver extends AbstractSaver{
         if(obj.getCampaign() != null)
             pre.setLong(38,obj.getCampaign().getId());
         else pre.setNull(38,Types.BIGINT);
+        return obj.getId();
     }
 
     public String getInsertSql(){

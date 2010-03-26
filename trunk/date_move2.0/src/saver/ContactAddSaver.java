@@ -20,10 +20,11 @@ public class ContactAddSaver extends AbstractSaver{
     }
 
     @Override
-    public void cap(Object object) throws SQLException {
+    public Object cap(Object object) throws SQLException {
         Long[] ls = (Long[])object;
         getPreStat().setLong(1, ls[0]);
         getPreStat().setLong(2, ls[1]);
+        return null;
     }
 
 }

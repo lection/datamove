@@ -68,6 +68,7 @@ public class FailTask extends J2JTaskSupport{
 
     @Override
     public Object parse(Connection conn, ResultSet rs) throws DataException, SQLException {
+        setSource_id(rs.getLong("id"));//记录日志
         final ContactRecord record = recordMap.get(rs.getString("yellowcard_id"));
         if(record==null)throw new DataException(rs.getString("yellowcard_id"));
         record.setRejectionReason(rejectReason.get(rs.getString("fact")));
