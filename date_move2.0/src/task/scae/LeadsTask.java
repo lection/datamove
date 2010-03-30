@@ -108,7 +108,7 @@ public class LeadsTask extends J2JTaskSupport{
                 }
                 cityMap.put(14, 397);//南汇归为浦东
                 cityMap.put(18, 397);//奉贤归为浦东
-                cityMap.put(19, 703);//崇明归为其他
+//                cityMap.put(19, 703);//崇明归为其他
                 cityMap.put(0, 703);//其他
             return null;}});
          DBUtil.executeQuery(getTargetConn(), "select c_code,c_id from t_biz_vo_category where c_org_id="
