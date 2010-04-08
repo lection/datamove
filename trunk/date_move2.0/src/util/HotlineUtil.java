@@ -23,7 +23,8 @@ import java.util.Map;
 public class HotlineUtil {
     private Map<String,List<Hotline>> hotlineMap = new HashMap<String,List<Hotline>>();
     public HotlineUtil(Connection targetConn){
-        DBUtil.executeQuery(targetConn, "select h.c_id,h.c_hotline,h.c_start_date,h.c_end_date,h.c_org_id from t_hotline h", new DBUtil.Query() {
+        DBUtil.executeQuery(targetConn, "select h.c_id,h.c_hotline,h.c_start_date,h.c_end_date,h.c_org_id " +
+                "from t_hotline h where h.c_ext_str1='2' and h.c_start_date is not null and h.c_end_date is not null", new DBUtil.Query() {
             public Object execute(ResultSet rs) throws SQLException {
                 Hotline hotline = null;
                 Map<Long,InternalOrgImpl> orgMap = new HashMap<Long, InternalOrgImpl>();
@@ -60,9 +61,15 @@ public class HotlineUtil {
         Hotline result = null;
         if(hotlineMap.containsKey(hotline)){
             for(Hotline line:hotlineMap.get(hotline)){
+                try{
                 if(date.after(line.getStartDate()) && date.before(line.getEndDate())){
                     result = line;
                     break;
+                }
+                }catch(NullPointerException e){
+                    System.out.println(hotline+"\t"+hotlineMap.get(hotline).size()+"\t"+line
+                            +"\t"+date+"\t"+line.getStartDate()+"\t"+line.getEndDate());
+                    throw new NullPointerException(e.getMessage());
                 }
             }
         }

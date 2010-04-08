@@ -102,8 +102,8 @@ public abstract class J2JTaskSupport extends SimpleTask{
 
     @Override
     public void afterStore() throws Exception {
-        if(source_id!=null&&target_id!=null)
-            log.info(source_id + "\t" + target_id);
+//        if(source_id!=null&&target_id!=null)
+//            log.info(source_id + "\t" + target_id);
     }
 
     public Saver getSaver() {

@@ -5,16 +5,16 @@
     <bean id="sourceDS" class="org.apache.commons.dbcp.BasicDataSource"
           destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://localhost:3306/scaedb_1" />
+        <property name="url" value="jdbc:mysql://localhost:3306/scaedb_0407" />
         <property name="username" value="root"/>
         <property name="password" value="root" />
     </bean>
     <bean id="targetDS" class="org.apache.commons.dbcp.BasicDataSource"
           destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://127.0.0.1:3306/mpmaps_test" />
+        <property name="url" value="jdbc:mysql://192.168.0.11:3306/mpmaps_0407" />
         <property name="username" value="root"/>
-        <property name="password" value="root" />
+        <property name="password" value="brainet123" />
     </bean>
     <bean id="sourceConn" factory-bean="sourceDS" factory-method="getConnection" scope="prototype"/>
     <bean id="targetConn" factory-bean="targetDS" factory-method="getConnection" scope="prototype"/>

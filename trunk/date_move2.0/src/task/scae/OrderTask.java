@@ -45,6 +45,7 @@ public class OrderTask extends J2JTaskSupport{
                     if(!productMap.containsKey(product_id)){
                         productMap.put(product_id, new Product());
                         productMap.get(product_id).setId(product_id);
+                        System.out.println("id:"+product_id+"\t"+lead.getId());
                     }
                     lead.setProduct(productMap.get(product_id));
                     leadsMap.put(rs.getString("c_ext_str1"),lead);
@@ -108,6 +109,7 @@ public class OrderTask extends J2JTaskSupport{
         order.setGiveType("148");//配给方式
         order.setCustomer(cr.getCustomer());
         order.setProduct(order.getLeads().getProduct());//车辆信息
+        System.out.println(order.getLeads().getProduct().getId());
         return order;
     }
 

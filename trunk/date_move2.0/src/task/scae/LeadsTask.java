@@ -149,8 +149,10 @@ public class LeadsTask extends J2JTaskSupport{
                     product = new Product();
                     product.setId(rs.getLong("c_id"));
                     code = rs.getString("c_code");
-                    productMap.put(Long.parseLong(code.substring(code.lastIndexOf("-")+1)),product);
-                    productNameMap.put(rs.getString("c_name"), product);
+                    try{
+                        productMap.put(Long.parseLong(code.substring(code.lastIndexOf("-")+1)),product);
+                        productNameMap.put(rs.getString("c_name"), product);
+                    }catch(Exception ex){continue;}
                 }
             return null;}});
     }
