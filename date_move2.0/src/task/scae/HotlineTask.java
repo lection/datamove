@@ -39,7 +39,7 @@ public class HotlineTask extends J2JTaskSupport{
         hotline.setStartDate(rs.getDate("create_date"));
         hotline.setCreatedBy(rs.getString("created_by")+" data_m");
         Date endDate = rs.getDate("update_date");
-        if(endDate == null)endDate = java.sql.Date.valueOf("2082-11-12");
+        if(endDate == null)endDate = java.sql.Date.valueOf("2010-04-08");
         hotline.setUpdateDate(endDate);
         hotline.setEndDate(endDate);
         hotline.setUpdatedBy(rs.getString("updated_by"));
