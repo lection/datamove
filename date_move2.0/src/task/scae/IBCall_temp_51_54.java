@@ -7,74 +7,57 @@ package task.scae;
 
 import com.linkin.crm.comm.model.IBCall;
 import com.linkin.crm.core.model.Hotline;
+import com.linkin.crm.um.model.InternalOrgImpl;
 import core.adapter.DataException;
 import core.adapter.J2JTaskSupport;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 import util.DBUtil;
-import util.HotlineUtil;
-import util.OrgUtil;
 
 /**
  *
  * @author Lection <yujw@linkinways.com>
  */
-public class IBCallTask extends J2JTaskSupport{
-    private HotlineUtil hotlineUtil;
-    private OrgUtil orgUtil;
-    private String orgs;
-    private Set<Long> set = new HashSet<Long>();
+public class IBCall_temp_51_54 extends J2JTaskSupport {
+    public Map<String,Hotline> hotlineMap = new HashMap<String, Hotline>();
 
     @Override
     public void init() throws Exception {
         super.init();
-        for(String s:orgs.split(",")){
-            set.add(orgUtil.getOrg(Long.valueOf(s)).getId());
-        }
+        Hotline l1 = new Hotline();
+        Hotline l2 = new Hotline();
+        InternalOrgImpl o1 = new InternalOrgImpl();
+        l1.setId(1347);
+        l2.setId(1342);
+        o1.setId(35);
+        l1.setOrg(o1);
+        l2.setOrg(o1);
+        hotlineMap.put("61501366", l1);
+        hotlineMap.put("61501388", l2);
     }
-    
+
     @Override
     public Object parse(Connection conn, ResultSet rs) throws DataException, SQLException {
-        setSource_id(rs.getLong("id"));//记录日志
         IBCall ibcall = new IBCall();
         ibcall.setCallno(rs.getString("callno"));
         ibcall.setStartTime(rs.getTimestamp("ibtime"));
-        Hotline hotline = hotlineUtil.getHotline(ibcall.getCallno(), ibcall.getStartTime());
-        if(hotline == null || !set.contains(hotline.getOrg().getId()))throw new DataException(null);
+        Hotline hotline = hotlineMap.get(ibcall.getCallno());
+//        if(hotline == null || !set.contains(hotline.getOrg().getId()))throw new DataException(null);
         ibcall.setOrg(hotline.getOrg());
         ibcall.setIbno(rs.getString("ibno"));
         ibcall.setEndTime(rs.getTimestamp("endtime"));
         ibcall.setDur(rs.getInt("dur"));
         ibcall.setPick(rs.getString("pick"));
         ibcall.setRec(rs.getString("rec"));
-        ibcall.setDurDisplay(getDurDisplay(ibcall.getDur()));
+        ibcall.setDurDisplay(IBCallTask.getDurDisplay(ibcall.getDur()));
         ibcall.setCreatedBy(rs.getString("created_by"));
         ibcall.setCreatedDate(rs.getDate("create_date"));
         ibcall.setVisible(true);
         ibcall.setId(DBUtil.getLaskKey(getTargetConn(), "t_ibcall"));
         return ibcall;
-    }
-
-    public static String getDurDisplay(int dur){
-        return dur/3600+"时"+(dur%3600)/60+"分"+(dur%60)+"秒";
-    }
-
-    @Override
-    public void errorHandle(DataException ex) {}
-
-    public void setHotlineUtil(HotlineUtil hotlineUtil) {
-        this.hotlineUtil = hotlineUtil;
-    }
-
-    public void setOrgUtil(OrgUtil orgUtil) {
-        this.orgUtil = orgUtil;
-    }
-
-    public void setOrgs(String orgs) {
-        this.orgs = orgs;
     }
 
 }

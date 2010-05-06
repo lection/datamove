@@ -37,6 +37,10 @@ public class HotlineUtil {
                     hotline.setHotline(rs.getString("c_hotline"));
                     hotline.setStartDate(rs.getDate("c_start_date"));
                     hotline.setEndDate(rs.getDate("c_end_date"));
+                    hotline.setEndDate(new java.util.Date(hotline.getEndDate().getTime()));
+                    hotline.getEndDate().setHours(23);
+                    hotline.getEndDate().setMinutes(59);
+                    hotline.getEndDate().setSeconds(59);
                     org_id = rs.getLong("c_org_id");
                     org = orgMap.get(org_id);
                     if(org == null){

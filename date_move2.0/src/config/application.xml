@@ -8,13 +8,14 @@
                 <!--<ref bean="userTask"/>
                 <ref bean="hotlineTask"/>-->
                 <!--<ref bean="mediaPlanTask"/>
-                <ref bean="campaignTask"/>
-                <ref bean="ibCallTask"/>
-                <ref bean="leadsTask"/>
+                <ref bean="campaignTask"/>-->
+                <!--<ref bean="ibCallTask"/>-->
+                <!--<ref bean="leadsTask"/>
                 <ref bean="flTask"/>-->
                 <!--<ref bean="failTask"/>
-                <ref bean="orderTask"/>
-                <ref bean="lead2ibcall"/>-->
+                <ref bean="orderTask"/>-->
+                <!--<ref bean="lead2ibcall"/>-->
+                <ref bean="ibcall_temp"/>
             </list>
         </property>
     </bean>
@@ -22,7 +23,7 @@
     <bean id="userTask" class="task.scae.SaleUserTask" autowire="byName" lazy-init="true">
         <property name="saver" ref="userSaver"/>
         <property name="parent_name" value="上海销售服务中心"/>
-        <property name="sql" value="select user.*,org.dcenter_name from scae_dcentersales user,scae_dcenter org where user.dcenter_id in (3,30,24,8,27,2,4,26) and user.dcenter_id=org.id"/>
+        <property name="sql" value="select user.*,org.dcenter_name from scae_dcentersales user,scae_dcenter org where user.dcenter_id in (28,32,31,18,5,33,6,21,25,12) and user.dcenter_id=org.id"/>
     </bean>
     <bean id="hotlineTask" class="task.scae.HotlineTask" autowire="byName" lazy-init="true">
         <property name="saver" ref="hotlineSaver"/>
@@ -30,7 +31,7 @@
             <value>
                 select line.*
                 from scae_dcenterhotline line
-                where line.dcenter_id in (3,30,24,8,27,2,4,26)
+                where line.dcenter_id in (28,32,31,18,5,33,6,21,25,12)
             </value>
         </property>
     </bean>
@@ -38,7 +39,7 @@
         <property name="sql">
             <value>
                select m.* from scae_campaignmedia m,scae_campaign c
-               where m.campaign_id=c.id and c.dcenter_id in (3,30,24,8,27,2,4,26)
+               where m.campaign_id=c.id and c.dcenter_id in (28,32,31,18,5,33,6,21,25,12)
             </value>
         </property>
         <property name="saver" ref="mediaPlanSaver"/>
@@ -48,7 +49,7 @@
             <value>
                 select c.*,obj.obj,obj.carmodel_id
                 from scae_campaign as c left outer join scae_campaignobj as obj on c.id=obj.campaign_id
-                where c.dcenter_id in (3,30,24,8,27,2,4,26)
+                where c.dcenter_id in (28,32,31,18,5,33,6,21,25,12)
                 order by c.id
             </value>
         </property>
@@ -56,7 +57,7 @@
     </bean>
     <bean id="ibCallTask" class="task.scae.IBCallTask" autowire="byName" lazy-init="true">
         <property name="sql" value="select ib.* from scae_ibcall ib"/>
-        <property name="orgs" value="3,30,24,8,27,2,4,26"/>
+        <property name="orgs" value="28,32,31,18,5,33,6,21,25,12"/>
         <property name="saver" ref="ibCallSaver"/>
     </bean>
     <!--客户档案 注意：在SCAE地址表中加入id为0名称为其他的字段，与未收集地址信息的进行匹配-->
@@ -65,7 +66,7 @@
             <value>
                 select card.*
                 from scae_yellowcard card
-                where card.dcenter_id in (3,30,24,8,27,2,4,26)
+                where card.dcenter_id in (28,32,31,18,5,33,6,21,25,12)
             </value>
         </property>
         <property name="saver" ref="leadsSaver"/>
@@ -75,7 +76,7 @@
             <value>
                 select fl.*,yc.dcenter_id
                 from scae_ycfollowup fl,scae_yellowcard yc
-                where fl.yellowcard_id=yc.id and yc.dcenter_id in (3,30,24,8,27,2,4,26)
+                where fl.yellowcard_id=yc.id and yc.dcenter_id in (28,32,31,18,5,33,6,21,25,12)
                 order by fl.yellowcard_id,fl.no,create_date
             </value>
         </property>
@@ -87,7 +88,7 @@
                 select fail.*
                 from scae_ycresultf fail,scae_yellowcard card
                 where card.id=fail.yellowcard_id
-                and card.dcenter_id in (3,30,24,8,27,2,4,26)
+                and card.dcenter_id in (28,32,31,18,5,33,6,21,25,12)
             </value>
         </property>
     </bean>
@@ -97,12 +98,21 @@
                 select yc.id
                 from scae_yellowcard yc
                 where (yc.status='suc' or yc.status='order')
-                and yc.dcenter_id in (3,30,24,8,27,2,4,26)
+                and yc.dcenter_id in (28,32,31,18,5,33,6,21,25,12)
             </value>
         </property>
         <property name="saver" ref="orderSaver"/>
     </bean>
     <bean id="lead2ibcall" class="task.scae.Leads2IBCall" autowire="byName" lazy-init="true">
-        <property name="ibcall_id" value="3079"/>
+        <property name="ibcall_id" value="75408"/>
+    </bean>
+    <!--临时-->
+    <bean id="ibcall_temp" class="task.scae.IBCall_temp_51_54" autowire="byName" lazy-init="true">
+        <property name="saver" ref="ibCallSaver"/>
+        <property name="sql">
+            <value>
+                select ib.* from scae_ibcall ib where ib.ibtime>'2010-05-01' and ib.callno in ('61501366','61501388')
+            </value>
+        </property>
     </bean>
 </beans>
