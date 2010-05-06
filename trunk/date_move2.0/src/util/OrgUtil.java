@@ -31,19 +31,29 @@ public class OrgUtil {
         this.sourceConn = sourceConn;
         this.parent_name = parent_name;
         DBUtil.executeQuery(targetConn,
-                "select o2.c_id as id,o2.c_alias as name,o.c_id as pid from t_organization o,t_organization o2 where o.c_name='" + parent_name
-                + "' and o.c_id=o2.c_parent_id"
+                "select o2.c_id as id,o2.c_alias as name from t_organization o2 where" +
+                " o2.c_parent_id in (select o3.c_id from t_organization o3 where o3.c_parent_id in (select o.c_id from t_organization as o where o.c_name='"+parent_name+"'))"
                 , new Query(){
             public Object execute(ResultSet rs) throws SQLException{
                 while(rs.next()){
                     InternalOrgImpl org = new InternalOrgImpl();
                     org.setId(rs.getLong("id"));
                     OrgUtil.this.orgAliasMap.put(rs.getString("name"), org);
-                    OrgUtil.this.org.setId(rs.getLong("pid"));
+//                    OrgUtil.this.org.setId(rs.getLong("pid"));
                     mpmapsIdMap.put(org.getId(), org);
                 }return null;
             }
         });
+        DBUtil.executeQuery(targetConn,
+                "select o.c_id as pid from t_organization as o where o.c_name='"+parent_name+"'"
+                , new Query(){
+            public Object execute(ResultSet rs) throws SQLException{
+                while(rs.next()){
+                    OrgUtil.this.org.setId(rs.getLong("pid"));
+                }return null;
+            }
+        });
+        
         DBUtil.executeQuery(sourceConn,
                 "select org.id,org.dcenter_name from scae_dcenter org"
                 , new Query(){

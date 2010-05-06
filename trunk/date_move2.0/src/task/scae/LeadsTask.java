@@ -232,7 +232,7 @@ public class LeadsTask extends J2JTaskSupport{
         lead.setInfoChannel(mediaName);//媒体名称
         lead.setP_ext_long2(salesMap2.get(rs.getString("csales")+""+rs.getString("dcenter_id")).getId()+"");//留档顾问
 
-        lead.setBudget("101");//购车预算
+        lead.setBudget("7891");//购车预算 自定义的未收集
         lead.setCurrPrep("107");//资金储备
         lead.setConcernPoints("22");//通话关注点
         lead.setAlreadyVistiedDlr("0");//是否已进店
