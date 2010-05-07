@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+		  "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+    <bean id="taskList" class="core.TaskList">
+        <property name="taskList">
+            <list>
+                <ref bean="hotlineTask"/>
+            </list>
+        </property>
+    </bean>
+    <bean id="orgIdMap" class="java.util.HashMap">
+       <constructor-arg>
+        <map>
+         <entry key="1" value="165"/><!--北京保利星徽汽车服务有限公司-->
+         <entry key="2" value="166"/><!--北京英华五方汽车销售服务有限公司-->
+         <entry key="3" value="167"/><!--北京嘉华京顺汽车销售服务有限公司-->
+         <entry key="4" value="168"/><!--北京中汇通合汽车销售服务有限公司-->
+         <entry key="7" value="169"/><!--分数宝-->
+        </map>
+       </constructor-arg>
+    </bean>
+    <bean id="hotlineTask" class="task.jiahua.HotlineTask" autowire="byName" lazy-init="true">
+        <!--property name="saver" ref="hotlineSaver"/-->
+        <property name="sql">
+            <value>
+                select line.*
+                from jh_dcenterhotline line
+                where line.dcenter_id in (1,2,3,4,7)
+            </value>
+        </property>
+    </bean>
+</beans>
