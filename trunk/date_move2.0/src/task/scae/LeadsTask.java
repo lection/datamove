@@ -379,12 +379,21 @@ public class LeadsTask extends J2JTaskSupport{
         cr.setContactDate(lead.getRegisterDate());
         cr.setSequence(0);
         cr.setFlType("123");//设置跟进性质,首次建卡
-        cr.setFlContent("126");//预约来店
+        cr.setFlContent("132");//跟进内容 其他
+        if(lead.getTestDrive() == 1){
+            cr.setFlContent(cr.getFlContent()+",129");
+            cr.setTestDrive(1);
+        }else{
+            cr.setTestDrive(0);
+        }
         Long fl_way_id = null;
         switch(lead.getRegisterChannel().charAt(0)){
-            case 'I':fl_way_id = 127l;break;
-            case 'C':fl_way_id = 131l;break;
-            case 'H':fl_way_id = 126l;break;
+//            case 'I':fl_way_id = 127l;break;
+//            case 'C':fl_way_id = 131l;break;
+//            case 'H':fl_way_id = 126l;break;
+            case 'I':fl_way_id = 134l;break;
+            case 'C':fl_way_id = 138l;break;
+            case 'H':fl_way_id = 133l;break;
         }
         cr.setContactChannel(String.valueOf(fl_way_id));
         cr.setP_ext_long1("close");

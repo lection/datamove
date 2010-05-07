@@ -65,7 +65,7 @@ public class SaleUserTask extends J2JTaskSupport{
         });
         DBUtil.executeQuery(getTargetConn(),
                 "select o2.c_id as id,o2.c_alias as name from t_organization o,t_organization o2 where o.c_name='" + parent_name
-                + "' and o.c_id=o2.c_parent_id"
+                + "' and o2.c_parent_id in (select o3.c_id as id_3 from t_organization as o3 where o3.c_parent_id=o.c_id)"
                 , new Query(){
             public Object execute(ResultSet rs) throws SQLException{
                 while(rs.next()){
