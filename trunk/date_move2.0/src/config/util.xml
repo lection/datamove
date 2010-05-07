@@ -2,15 +2,15 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
 		  "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
 <beans>
-    <bean id="orgUtil" class="util.OrgUtil" autowire="byName">
+    <bean id="orgUtil" class="util.OrgUtil" autowire="byName" lazy-init="true">
         <constructor-arg index="0" ref="targetConn"/>
         <constructor-arg index="1" ref="sourceConn"/>
         <constructor-arg index="2" value="上海销售服务中心"/>
     </bean>
-    <bean id="hotlineUtil" class="util.HotlineUtil" autowire="byName">
+    <bean id="hotlineUtil" class="util.HotlineUtil" autowire="byName" lazy-init="true">
         <constructor-arg index="0" ref="targetConn"/>
     </bean>
-    <bean id="proUtil" class="util.ProductCategoryUtil" autowire="byName">
+    <bean id="proUtil" class="util.ProductCategoryUtil" autowire="byName" lazy-init="true">
         <constructor-arg index="0" ref="targetConn"/>
         <constructor-arg index="1" value="上海销售服务中心"/>
     </bean>
