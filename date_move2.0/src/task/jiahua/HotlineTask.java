@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import util.DBUtil;
 import util.DBUtil.Query;
 
@@ -30,18 +32,17 @@ public class HotlineTask extends J2JTaskSupport{
         Hotline hotline = new Hotline();
         hotline.setHotline(rs.getString("hotline"));
         hotline.setOrg(orgMap.get(rs.getLong("dcenter_id")));
-        if("active".equals(rs.getString("status"))){
-            hotline.setVisible("1");
-            hotline.setStatus("1");
-        }else{
-            hotline.setVisible("0");
-            hotline.setStatus("0");
-        }
+//        if("active".equals(rs.getString("status"))){
+//            hotline.setVisible("1");
+//            hotline.setStatus("1");
+//        }else{
+//            hotline.setVisible("0");
+//            hotline.setStatus("0");
+//        }
         hotline.setStartDate(rs.getDate("create_date"));
         hotline.setCreatedBy(rs.getString("created_by")+" data_m");
         Date endDate = rs.getDate("update_date");
-//        if(endDate == null)endDate = java.sql.Date.valueOf("2010-04-08");
-        if(endDate == null)endDate = new Date();
+//        if(endDate == null)endDate = new Date();
         hotline.setUpdateDate(endDate);
         hotline.setEndDate(endDate);
         hotline.setUpdatedBy(rs.getString("updated_by"));
@@ -55,13 +56,17 @@ public class HotlineTask extends J2JTaskSupport{
             }
         });
         hotline2.setId(key);
+        hotline.setHotline(rs.getString("mainline"));
         hotline.setExt_str1("2");
         hotline.setParent(hotline2);
         return hotline;
     }
 
     public void setOrgIdMap(Map orgIdMap) {
-        
+        for(Map.Entry entry:(Set<Entry>)orgIdMap.entrySet()){
+            orgMap.put(Long.valueOf((String)entry.getKey()), new InternalOrgImpl());
+            orgMap.get(Long.valueOf((String)entry.getKey())).setId(Long.valueOf((String)entry.getValue()));
+        }
     }
 
 }

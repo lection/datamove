@@ -12,9 +12,9 @@
                 <ref bean="ibCallTask"/>-->
                 <!--<ref bean="leadsTask"/>
                 <ref bean="flTask"/>-->
-                <!--<ref bean="failTask"/>
+                <ref bean="failTask"/>
                 <ref bean="orderTask"/>
-                <ref bean="lead2ibcall"/>-->
+                <ref bean="lead2ibcall"/>
             </list>
         </property>
     </bean>

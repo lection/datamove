@@ -5,7 +5,8 @@
     <bean id="taskList" class="core.TaskList">
         <property name="taskList">
             <list>
-                <ref bean="hotlineTask"/>
+                <!--<ref bean="hotlineTask"/>-->
+                <ref bean="ibCallTask"/>
             </list>
         </property>
     </bean>
@@ -21,7 +22,7 @@
        </constructor-arg>
     </bean>
     <bean id="hotlineTask" class="task.jiahua.HotlineTask" autowire="byName" lazy-init="true">
-        <!--property name="saver" ref="hotlineSaver"/-->
+        <property name="saver" ref="hotlineSaver"/>
         <property name="sql">
             <value>
                 select line.*
@@ -29,5 +30,10 @@
                 where line.dcenter_id in (1,2,3,4,7)
             </value>
         </property>
+    </bean>
+    <bean id="ibCallTask" class="task.jiahua.IBCallTask" autowire="byName" lazy-init="true">
+        <property name="sql" value="select ib.* from jh_ibcall ib"/>
+        <property name="orgs" value="1,2,3,4,7"/>
+        <property name="saver" ref="ibCallSaver"/>
     </bean>
 </beans>
