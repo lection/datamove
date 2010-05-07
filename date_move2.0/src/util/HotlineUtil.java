@@ -24,7 +24,7 @@ public class HotlineUtil {
     private Map<String,List<Hotline>> hotlineMap = new HashMap<String,List<Hotline>>();
     public HotlineUtil(Connection targetConn){
         DBUtil.executeQuery(targetConn, "select h.c_id,h.c_hotline,h.c_start_date,h.c_end_date,h.c_org_id " +
-                "from t_hotline h where c_id>993 and h.c_ext_str1='2' and h.c_start_date is not null", new DBUtil.Query() {
+                "from t_hotline h where h.c_ext_str1='2' and h.c_start_date is not null", new DBUtil.Query() {
             public Object execute(ResultSet rs) throws SQLException {
                 Hotline hotline = null;
                 Map<Long,InternalOrgImpl> orgMap = new HashMap<Long, InternalOrgImpl>();

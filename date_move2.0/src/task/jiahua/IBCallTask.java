@@ -45,6 +45,7 @@ public class IBCallTask extends J2JTaskSupport{
         ibcall.setStartTime(rs.getTimestamp("ibtime"));
         Hotline hotline = hotlineUtil.getHotline(ibcall.getCallno(), ibcall.getStartTime());
         if(hotline == null || !set.contains(hotline.getOrg().getId()))throw new DataException(null);
+        ibcall.setCallno(hotline.getHotline());//翻译话单内容，挂在热线号码下
         ibcall.setOrg(hotline.getOrg());
         ibcall.setIbno(rs.getString("ibno"));
         ibcall.setEndTime(rs.getTimestamp("endtime"));
