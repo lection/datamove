@@ -5,7 +5,7 @@
     <bean id="taskList" class="core.TaskList">
         <property name="taskList">
             <list>
-                <ref bean="hotlineTask"/>
+                <!--<ref bean="hotlineTask"/>-->
                 <ref bean="ibCallTask"/>
             </list>
         </property>
@@ -13,11 +13,11 @@
     <bean id="orgIdMap" class="java.util.HashMap">
        <constructor-arg>
         <map>
-         <entry key="1" value="165"/><!--北京保利星徽汽车服务有限公司-->
-         <entry key="2" value="166"/><!--北京英华五方汽车销售服务有限公司-->
-         <entry key="3" value="167"/><!--北京嘉华京顺汽车销售服务有限公司-->
-         <entry key="4" value="168"/><!--北京中汇通合汽车销售服务有限公司-->
-         <entry key="7" value="169"/><!--分数宝-->
+         <entry key="1" value="259"/><!--北京保利星徽汽车服务有限公司-->
+         <entry key="2" value="261"/><!--北京英华五方汽车销售服务有限公司-->
+         <entry key="3" value="262"/><!--北京嘉华京顺汽车销售服务有限公司-->
+         <entry key="4" value="260"/><!--北京中汇通合汽车销售服务有限公司-->
+         <entry key="7" value="266"/><!--分数宝-->
         </map>
        </constructor-arg>
     </bean>

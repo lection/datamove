@@ -5,14 +5,14 @@
     <bean id="sourceDS" class="org.apache.commons.dbcp.BasicDataSource"
           destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://localhost:3306/jiahua_test" />
+        <property name="url" value="jdbc:mysql://localhost:3306/classicdb" />
         <property name="username" value="root"/>
         <property name="password" value="root" />
     </bean>
     <bean id="targetDS" class="org.apache.commons.dbcp.BasicDataSource"
           destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://192.168.0.11:3306/mpmaps0427" />
+        <property name="url" value="jdbc:mysql://192.168.0.11:3306/mpmaps_0512_test" />
         <property name="username" value="root"/>
         <property name="password" value="brainet123" />
     </bean>
