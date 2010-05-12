@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package task.jiahua;
+package task.mg;
 
 import com.linkin.crm.core.model.Hotline;
 import com.linkin.crm.um.model.InternalOrgImpl;
@@ -31,7 +31,7 @@ public class HotlineTask extends J2JTaskSupport{
     public Object parse(Connection conn, ResultSet rs) throws DataException, SQLException {
         Hotline hotline = new Hotline();
         hotline.setHotline(rs.getString("hotline"));
-        hotline.setOrg(orgMap.get(rs.getLong("dcenter_id")));
+        hotline.setOrg(orgMap.get(rs.getLong("org_id")));
 //        if("active".equals(rs.getString("status"))){
             hotline.setVisible("1");
 //            hotline.setStatus("1");
