@@ -66,13 +66,17 @@ public class HotlineUtil {
                 return null;
             }
         });
-        DBUtil.executeQuery(targetConn, "select h.c_id,h.c_hotline" +
+        DBUtil.executeQuery(targetConn, "select h.c_id,h.c_hotline " +
                 "from t_hotline h where h.c_ext_str1='1'", new DBUtil.Query() {
             public Object execute(ResultSet rs) throws SQLException {
                 Long id = null;
                 while(rs.next()){
                     id = rs.getLong("c_id");
+                    try{
                     parentMap.get(id).setHotline(rs.getString("c_hotline"));
+                    }catch(NullPointerException ne){
+
+                    }
                 }
                 return null;
             }

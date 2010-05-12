@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+		  "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+    <bean id="taskList" class="core.TaskList">
+        <property name="taskList">
+            <list>
+                <ref bean="hotlineTask"/>
+                <!--<ref bean="ibCallTask"/>-->
+            </list>
+        </property>
+    </bean>
+    <bean id="orgIdMap" class="java.util.HashMap">
+       <constructor-arg>
+        <map>
+         <entry key="25" value="254"/><!--上海云峰交运汽车销售服务有限公司-->
+         <entry key="27" value="255"/><!--上海安吉斯鸿汽车销售服务有限公司-->
+        </map>
+       </constructor-arg>
+    </bean>
+    <bean id="hotlineTask" class="task.classic.HotlineTask" autowire="byName" lazy-init="true">
+        <property name="saver" ref="hotlineSaver"/>
+        <property name="sql">
+            <value>
+                select line.*
+                from classicapp_hotline line
+                where line.org_id in (25,27)
+            </value>
+        </property>
+    </bean>
+    <bean id="ibCallTask" class="task.classic.IBCallTask" autowire="byName" lazy-init="true">
+        <property name="sql" value="select ib.* from classicapp_ibcall ib"/>
+        <property name="orgs" value="25,27"/>
+        <property name="saver" ref="ibCallSaver"/>
+    </bean>
+</beans>
