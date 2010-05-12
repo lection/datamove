@@ -22,8 +22,9 @@ import java.util.Map;
  */
 public class HotlineUtil {
     private Map<String,List<Hotline>> hotlineMap = new HashMap<String,List<Hotline>>();
+    private Map<Long,Hotline> parentMap = new HashMap<Long,Hotline>();
     public HotlineUtil(Connection targetConn){
-        DBUtil.executeQuery(targetConn, "select h.c_id,h.c_hotline,h.c_start_date,h.c_end_date,h.c_org_id " +
+        DBUtil.executeQuery(targetConn, "select h.c_id,h.c_hotline,h.c_start_date,h.c_end_date,h.c_org_id,h.c_parent_id " +
                 "from t_hotline h where h.c_ext_str1='2' and h.c_start_date is not null", new DBUtil.Query() {
             public Object execute(ResultSet rs) throws SQLException {
                 Hotline hotline = null;
@@ -37,6 +38,11 @@ public class HotlineUtil {
                     hotline.setHotline(rs.getString("c_hotline"));
                     hotline.setStartDate(rs.getDate("c_start_date"));
                     hotline.setEndDate(rs.getDate("c_end_date"));
+                    Hotline parent_hotline = new Hotline();
+                    parent_hotline.setId(rs.getLong("c_parent_id"));
+                    hotline.setParent(parent_hotline);
+                    parentMap.put(parent_hotline.getId(), parent_hotline);
+                    
                     if(hotline.getEndDate() != null){
                         hotline.setEndDate(new java.util.Date(hotline.getEndDate().getTime()));
                         hotline.getEndDate().setHours(23);
@@ -56,6 +62,16 @@ public class HotlineUtil {
                     }
                     list = hotlineMap.get(hotline.getHotline());
                     list.add(hotline);
+                }
+                return null;
+            }
+        });
+        DBUtil.executeQuery(targetConn, "select h.c_id,h.c_hotline" +
+                "from t_hotline h where h.c_ext_str1='1'", new DBUtil.Query() {
+            public Object execute(ResultSet rs) throws SQLException {
+                Long id = null;
+                while(rs.next()){
+                    id = rs.getLong("c_id");
                 }
                 return null;
             }
