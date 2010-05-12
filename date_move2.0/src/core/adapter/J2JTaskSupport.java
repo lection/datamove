@@ -5,7 +5,7 @@
 
 package core.adapter;
 
-import com.sun.java_cup.internal.production;
+//import com.sun.java_cup.internal.production;
 import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.ResultSet;

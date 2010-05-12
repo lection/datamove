@@ -72,6 +72,7 @@ public class HotlineUtil {
                 Long id = null;
                 while(rs.next()){
                     id = rs.getLong("c_id");
+                    parentMap.get(id).setHotline(rs.getString("c_hotline"));
                 }
                 return null;
             }
