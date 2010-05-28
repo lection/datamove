@@ -5,8 +5,8 @@
     <bean id="taskList" class="core.TaskList">
         <property name="taskList">
             <list>
-                <ref bean="hotlineTask"/>
-                <!--<ref bean="ibCallTask"/>-->
+                <!--<ref bean="hotlineTask"/>-->
+                <ref bean="ibCallTask"/>
             </list>
         </property>
     </bean>
