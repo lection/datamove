@@ -13,23 +13,23 @@
     <bean id="orgIdMap" class="java.util.HashMap">
        <constructor-arg>
         <map>
-         <entry key="910000000000014" value="250"/><!--南京绅华汽车贸易有限公司-->
+         <entry key="3" value="260"/><!--中汇通合-->
         </map>
        </constructor-arg>
     </bean>
-    <bean id="hotlineTask" class="task.mg.HotlineTask" autowire="byName" lazy-init="true">
+    <bean id="hotlineTask" class="task.honda.HotlineTask" autowire="byName" lazy-init="true">
         <property name="saver" ref="hotlineSaver"/>
         <property name="sql">
             <value>
                 select line.*
-                from mg_dcenterhotline line
-                where line.org_id=910000000000014
+                from honda_dcenterhotline line
+                where line.org_id=3
             </value>
         </property>
     </bean>
-    <bean id="ibCallTask" class="task.mg.IBCallTask" autowire="byName" lazy-init="true">
-        <property name="sql" value="select ib.* from mg_ibcall ib"/>
-        <property name="orgs" value="910000000000014"/>
+    <bean id="ibCallTask" class="task.honda.IBCallTask" autowire="byName" lazy-init="true">
+        <property name="sql" value="select ib.* from honda_ibcall ib"/>
+        <property name="orgs" value="3"/>
         <property name="saver" ref="ibCallSaver"/>
     </bean>
 </beans>

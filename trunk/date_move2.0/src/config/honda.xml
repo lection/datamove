@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+		  "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+    <bean id="taskList" class="core.TaskList">
+        <property name="taskList">
+            <list>
+                <!--<ref bean="userTask"/>
+                <ref bean="hotlineTask"/>-->
+                <!--<ref bean="mediaPlanTask"/>
+                <ref bean="campaignTask"/>
+                <ref bean="ibCallTask"/>-->
+                <!--<ref bean="leadsTask"/>
+                <ref bean="flTask"/>-->
+                <ref bean="failTask"/>
+                <ref bean="orderTask"/>
+                <ref bean="lead2ibcall"/>
+            </list>
+        </property>
+    </bean>
+    <bean id="orgIdMap" class="java.util.HashMap">
+       <constructor-arg>
+        <map>
+         <entry key="5" value="265"/><!--西上海金悦 广本汽车奉贤4S店-->
+        </map>
+       </constructor-arg>
+    </bean>
+    <bean id="productIdMap" class="java.util.HashMap">
+        <constructor-arg>
+        <map>
+         <!--<entry key="1" value="286"/>
+         <entry key="2" value="287"/>
+         <entry key="3" value="288"/>
+         <entry key="4" value="289"/>
+         <entry key="5" value="290"/>
+         <entry key="6" value="291"/>
+         <entry key="7" value="292"/>
+         <entry key="8" value="293"/>
+         <entry key="9" value="294"/>
+         <entry key="10" value="295"/>
+         <entry key="11" value="296"/>
+         <entry key="12" value="297"/>
+         <entry key="13" value="298"/>
+         <entry key="14" value="299"/>
+         <entry key="15" value="300"/>
+         <entry key="16" value="301"/>
+         <entry key="17" value="302"/>
+         <entry key="18" value="303"/>
+         <entry key="19" value="304"/>
+         <entry key="20" value="305"/>
+         <entry key="21" value="306"/>
+         <entry key="22" value="307"/>
+         <entry key="23" value="308"/>-->
+
+         <entry key="1" value="301"/>
+         <entry key="2" value="302"/>
+         <entry key="3" value="303"/>
+         <entry key="4" value="304"/>
+         <entry key="5" value="305"/>
+         <entry key="6" value="306"/>
+         <entry key="7" value="307"/>
+         <entry key="8" value="292"/>
+         <entry key="9" value="293"/>
+         <entry key="10" value="294"/>
+         <entry key="11" value="295"/>
+         <entry key="12" value="296"/>
+         <entry key="13" value="297"/>
+         <entry key="14" value="298"/>
+         <entry key="15" value="299"/>
+         <entry key="16" value="300"/>
+         <entry key="17" value="286"/>
+         <entry key="18" value="287"/>
+         <entry key="19" value="288"/>
+         <entry key="20" value="289"/>
+         <entry key="21" value="290"/>
+         <entry key="22" value="291"/>
+         <entry key="23" value="308"/>
+        </map>
+       </constructor-arg>
+    </bean>
+    <bean id="proCatIdMap" class="java.util.HashMap">
+        <constructor-arg>
+        <map>
+         <entry key="1" value="79"/>
+         <entry key="2" value="81"/>
+         <entry key="3" value="83"/>
+         <entry key="4" value="85"/>
+        </map>
+       </constructor-arg>
+    </bean>
+    <bean id="proIdMap" class="java.util.HashMap">
+        <constructor-arg>
+        <map>
+         <entry key="1" value="79"/>
+         <entry key="2" value="81"/>
+         <entry key="3" value="83"/>
+         <entry key="4" value="85"/>
+        </map>
+       </constructor-arg>
+    </bean>
+    <!--西上海金悦-->
+    <bean id="intOrg" class="com.linkin.crm.um.model.InternalOrgImpl">
+        <property name="id" value="265"/>
+    </bean>
+    <!--用户-->
+    <bean id="userTask" class="task.honda.SaleUserTask" autowire="byName" lazy-init="true">
+        <property name="saver" ref="userSaver"/>
+        <property name="sql" value="select user.* from honda_dcentersales user where user.org_id=5"/>
+    </bean>
+    <bean id="hotlineTask" class="task.honda.HotlineTask" autowire="byName" lazy-init="true">
+        <property name="saver" ref="hotlineSaver"/>
+        <property name="sql">
+            <value>
+                select line.*
+                from honda_dcenterhotline line
+                where line.org_id=5
+            </value>
+        </property>
+    </bean>
+    <bean id="campaignTask" class="task.honda.CampaignTask" autowire="byName" lazy-init="true">
+        <property name="sql">
+            <value>
+                select c.*,obj.obj,obj.carmodel_id
+                from honda_campaign as c left outer join honda_campaignobj as obj on c.id=obj.campaign_id
+                where c.org_id=5
+            </value>
+        </property>
+        <property name="saver" ref="campaignSaver"/>
+    </bean>
+    <bean id="mediaPlanTask" class="task.honda.MediaPlanTask" autowire="byName" lazy-init="true">
+        <property name="sql">
+            <value>
+               select m.* from honda_campaignmedia m,honda_campaign c
+               where m.campaign_id=c.id and c.org_id=5
+            </value>
+        </property>
+        <property name="saver" ref="mediaPlanSaver"/>
+    </bean>
+    <bean id="ibCallTask" class="task.honda.IBCallTask" autowire="byName" lazy-init="true">
+        <property name="sql" value="select ib.* from honda_ibcall ib"/>
+        <property name="orgs" value="5"/>
+        <property name="saver" ref="ibCallSaver"/>
+    </bean>
+ <!--客户档案 注意：在HONDA地址表中加入id为0名称为其他的字段，与未收集地址信息的进行匹配-->
+    <bean id="leadsTask" class="task.honda.LeadsTask" autowire="byName" lazy-init="true">
+        <property name="sql">
+            <value>
+                select card.*
+                from honda_yellowcard card
+                where card.org_id=5
+            </value>
+        </property>
+        <property name="saver" ref="leadsSaver"/>
+    </bean>
+    <bean id="flTask" class="task.honda.FollowTask" autowire="byName" lazy-init="true">
+        <property name="sql">
+            <value>
+                select fl.*,yc.org_id
+                from honda_ycfollowup fl,honda_yellowcard yc
+                where fl.yellowcard_id=yc.id and yc.org_id=5
+                order by fl.yellowcard_id,fl.no,create_date
+            </value>
+        </property>
+        <property name="saver" ref="flSaver"/>
+    </bean>
+    <bean id="failTask" class="task.honda.FailTask" autowire="byName" lazy-init="true">
+        <property name="sql">
+            <value>
+                select fail.*,card.contrastcarmodel
+                from honda_ycresultf fail,honda_yellowcard card
+                where card.id=fail.yellowcard_id
+                and card.org_id=5
+            </value>
+        </property>
+    </bean>
+    <bean id="orderTask" class="task.scae.OrderTask" autowire="byName" lazy-init="true">
+        <property name="sql">
+            <value>
+                select yc.id
+                from honda_yellowcard yc
+                where (yc.status='suc' or yc.status='order')
+                and yc.org_id=5
+            </value>
+        </property>
+        <property name="saver" ref="orderSaver"/>
+    </bean>
+    <bean id="lead2ibcall" class="task.scae.Leads2IBCall" autowire="byName" lazy-init="true">
+        <property name="ibcall_id" value="154641"/>
+    </bean>
+</beans>
